@@ -258,14 +258,15 @@ include('includes/db.php');
                         <span class="text-dark" style="width: 150px;">Tất cả</span>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="d-flex mx-3 py-2 border border-primary bg-light rounded-pill" data-bs-toggle="pill" href="#tab-cairang">
-                        <span class="text-dark" style="width: 150px;">Cái Răng</span>
-                    </a>
-                </li>
+
                 <li class="nav-item">
                     <a class="d-flex mx-3 py-2 border border-primary bg-light rounded-pill" data-bs-toggle="pill" href="#tab-ninhkieu">
                         <span class="text-dark" style="width: 150px;">Ninh Kiều</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="d-flex mx-3 py-2 border border-primary bg-light rounded-pill" data-bs-toggle="pill" href="#tab-cairang">
+                        <span class="text-dark" style="width: 150px;">Cái Răng</span>
                     </a>
                 </li>
                 <li class="nav-item">
@@ -290,7 +291,7 @@ include('includes/db.php');
                     <div class="row g-4">
                         <?php
                         // Truy vấn tất cả địa điểm
-                        $query = "SELECT DESTINATIONID, DESTINATIONNAME, IMAGE FROM destination";
+                        $query = "SELECT DESTINATIONID, DENAME, IMAGE FROM destination";
                         $stmt = $conn->prepare($query);
                         $stmt->execute();
                         $result = $stmt->get_result();
@@ -301,7 +302,7 @@ include('includes/db.php');
                             echo '<div class="destination-img h-100">';
                             echo '<img class="img-fluid rounded w-100 h-100" style="object-fit: cover; min-height: 300px;" src="data:image/jpeg;base64,' . base64_encode($row['IMAGE']) . '" alt="Image">';
                             echo '<div class="destination-overlay p-4">';
-                            echo '<h4 class="text-white mb-2 mt-3">' . htmlspecialchars($row['DESTINATIONNAME']) . '</h4>';
+                            echo '<h4 class="text-white mb-2 mt-3">' . htmlspecialchars($row['DENAME']) . '</h4>';
                             echo '<a href="#" class="btn-hover text-white">View All Place <i class="fa fa-arrow-right ms-2"></i></a>';
                             echo '</div>';
                             echo '<div class="search-icon">';
@@ -322,9 +323,9 @@ include('includes/db.php');
                     <div class="row g-4">
                         <?php
                         // Truy vấn các địa điểm Cái Răng dựa trên DISTRICTID
-                        $query = "SELECT DESTINATIONID, DESTINATIONNAME, IMAGE FROM destination WHERE DISTRICTID = ?";
+                        $query = "SELECT DESTINATIONID, DENAME, IMAGE FROM destination WHERE DISTRICTID = ?";
                         $stmt = $conn->prepare($query);
-                        $districtId = 1; // DISTRICTID của Cái Răng
+                        $districtId = 2; // DISTRICTID của Cái Răng
                         $stmt->bind_param("i", $districtId);
                         $stmt->execute();
                         $result = $stmt->get_result();
@@ -334,7 +335,7 @@ include('includes/db.php');
                             echo '<div class="destination-img h-100">';
                             echo '<img class="img-fluid rounded w-100 h-100" style="object-fit: cover; min-height: 300px;" src="data:image/jpeg;base64,' . base64_encode($row['IMAGE']) . '" alt="Image">';
                             echo '<div class="destination-overlay p-4">';
-                            echo '<h4 class="text-white mb-2 mt-3">' . htmlspecialchars($row['DESTINATIONNAME']) . '</h4>';
+                            echo '<h4 class="text-white mb-2 mt-3">' . htmlspecialchars($row['DENAME']) . '</h4>';
                             echo '<a href="#" class="btn-hover text-white">View All Place <i class="fa fa-arrow-right ms-2"></i></a>';
                             echo '</div>';
                             echo '<div class="search-icon">';
@@ -354,9 +355,9 @@ include('includes/db.php');
                     <div class="row g-4">
                         <?php
                         // Truy vấn các địa điểm Ninh Kiều dựa trên DISTRICTID
-                        $query = "SELECT DESTINATIONID, DESTINATIONNAME, IMAGE FROM destination WHERE DISTRICTID = ?";
+                        $query = "SELECT DESTINATIONID, DENAME, IMAGE FROM destination WHERE DISTRICTID = ?";
                         $stmt = $conn->prepare($query);
-                        $districtId = 2; // DISTRICTID của Ninh Kiều
+                        $districtId = 1; // DISTRICTID của Ninh Kiều
                         $stmt->bind_param("i", $districtId);
                         $stmt->execute();
                         $result = $stmt->get_result();
@@ -366,7 +367,7 @@ include('includes/db.php');
                             echo '<div class="destination-img h-100">';
                             echo '<img class="img-fluid rounded w-100 h-100" style="object-fit: cover; min-height: 300px;" src="data:image/jpeg;base64,' . base64_encode($row['IMAGE']) . '" alt="Image">';
                             echo '<div class="destination-overlay p-4">';
-                            echo '<h4 class="text-white mb-2 mt-3">' . htmlspecialchars($row['DESTINATIONNAME']) . '</h4>';
+                            echo '<h4 class="text-white mb-2 mt-3">' . htmlspecialchars($row['DENAME']) . '</h4>';
                             echo '<a href="#" class="btn-hover text-white">View All Place <i class="fa fa-arrow-right ms-2"></i></a>';
                             echo '</div>';
                             echo '<div class="search-icon">';
@@ -385,7 +386,7 @@ include('includes/db.php');
                     <div class="row g-4">
                         <?php
                         // Truy vấn các địa điểm Phong Điền dựa trên DISTRICTID
-                        $query = "SELECT DESTINATIONID, DESTINATIONNAME, IMAGE FROM destination WHERE DISTRICTID = ?";
+                        $query = "SELECT DESTINATIONID, DENAME, IMAGE FROM destination WHERE DISTRICTID = ?";
                         $stmt = $conn->prepare($query);
                         $districtId = 3; // DISTRICTID của Phong Điền
                         $stmt->bind_param("i", $districtId);
@@ -397,7 +398,7 @@ include('includes/db.php');
                             echo '<div class="destination-img h-100">';
                             echo '<img class="img-fluid rounded w-100 h-100" style="object-fit: cover; min-height: 300px;" src="data:image/jpeg;base64,' . base64_encode($row['IMAGE']) . '" alt="Image">';
                             echo '<div class="destination-overlay p-4">';
-                            echo '<h4 class="text-white mb-2 mt-3">' . htmlspecialchars($row['DESTINATIONNAME']) . '</h4>';
+                            echo '<h4 class="text-white mb-2 mt-3">' . htmlspecialchars($row['DENAME']) . '</h4>';
                             echo '<a href="#" class="btn-hover text-white">View All Place <i class="fa fa-arrow-right ms-2"></i></a>';
                             echo '</div>';
                             echo '<div class="search-icon">';
@@ -417,7 +418,7 @@ include('includes/db.php');
                     <div class="row g-4">
                         <?php
                         // Truy vấn các địa điểm Thốt Nốt dựa trên DISTRICTID
-                        $query = "SELECT DESTINATIONID, DESTINATIONNAME, IMAGE FROM destination WHERE DISTRICTID = ?";
+                        $query = "SELECT DESTINATIONID, DENAME, IMAGE FROM destination WHERE DISTRICTID = ?";
                         $stmt = $conn->prepare($query);
                         $districtId = 4; // DISTRICTID của Thốt Nốt
                         $stmt->bind_param("i", $districtId);
@@ -429,7 +430,7 @@ include('includes/db.php');
                             echo '<div class="destination-img h-100">';
                             echo '<img class="img-fluid rounded w-100 h-100" style="object-fit: cover; min-height: 300px;" src="data:image/jpeg;base64,' . base64_encode($row['IMAGE']) . '" alt="Image">';
                             echo '<div class="destination-overlay p-4">';
-                            echo '<h4 class="text-white mb-2 mt-3">' . htmlspecialchars($row['DESTINATIONNAME']) . '</h4>';
+                            echo '<h4 class="text-white mb-2 mt-3">' . htmlspecialchars($row['DENAME']) . '</h4>';
                             echo '<a href="#" class="btn-hover text-white">View All Place <i class="fa fa-arrow-right ms-2"></i></a>';
                             echo '</div>';
                             echo '<div class="search-icon">';
@@ -449,7 +450,7 @@ include('includes/db.php');
                     <div class="row g-4">
                         <?php
                         // Truy vấn các địa điểm Bình Thủy dựa trên DISTRICTID
-                        $query = "SELECT DESTINATIONID, DESTINATIONNAME, IMAGE FROM destination WHERE DISTRICTID = ?";
+                        $query = "SELECT DESTINATIONID, DENAME, IMAGE FROM destination WHERE DISTRICTID = ?";
                         $stmt = $conn->prepare($query);
                         $districtId = 5; // DISTRICTID của Bình Thủy
                         $stmt->bind_param("i", $districtId);
@@ -461,7 +462,7 @@ include('includes/db.php');
                             echo '<div class="destination-img h-100">';
                             echo '<img class="img-fluid rounded w-100 h-100" style="object-fit: cover; min-height: 300px;" src="data:image/jpeg;base64,' . base64_encode($row['IMAGE']) . '" alt="Image">';
                             echo '<div class="destination-overlay p-4">';
-                            echo '<h4 class="text-white mb-2 mt-3">' . htmlspecialchars($row['DESTINATIONNAME']) . '</h4>';
+                            echo '<h4 class="text-white mb-2 mt-3">' . htmlspecialchars($row['DENAME']) . '</h4>';
                             echo '<a href="#" class="btn-hover text-white">View All Place <i class="fa fa-arrow-right ms-2"></i></a>';
                             echo '</div>';
                             echo '<div class="search-icon">';

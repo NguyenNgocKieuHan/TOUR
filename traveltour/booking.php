@@ -2,8 +2,11 @@
 session_start();
 
 // Check if user is logged in
-if (!isset($_SESSION['USERID'])) {
-    echo "<script>alert('Bạn chưa đăng nhập!'); window.location.href='login.php';</script>";
+if (!isset($_SESSION['userid'])) {
+    echo "<script>
+    alert('Bạn chưa đăng nhập!');
+    window.location.href = 'login.php';
+</script>";
     exit();
 }
 
@@ -13,19 +16,32 @@ include('includes/header.php');
 include('includes/db.php');
 
 // Get the tour details from the URL
-if (isset($_GET['tourid']) && isset($_GET['tourname']) && isset($_GET['price'])) {
+if (isset($_GET['tourid'])) {
     $tourId = intval($_GET['tourid']);
-    $tourName = htmlspecialchars(urldecode($_GET['tourname']));
-    $price = htmlspecialchars($_GET['price']);
+
+    // Fetch tour details from database
+    $queryTour = "SELECT TOURNAME, PRICE FROM tour WHERE TOURID = ?";
+    $stmtTour = $conn->prepare($queryTour);
+    $stmtTour->bind_param("i", $tourId);
+    $stmtTour->execute();
+    $resultTour = $stmtTour->get_result();
+    $tourData = $resultTour->fetch_assoc();
+
+    if (!$tourData) {
+        echo "<p>Không tìm thấy thông tin tour!</p>";
+        exit;
+    }
+
+    $tourName = htmlspecialchars($tourData['TOURNAME']);
+    $price = htmlspecialchars($tourData['PRICE']);
 } else {
-    echo "<p>No tour information found.</p>";
+    echo "<p>Không tìm thấy thông tin tour !!</p>";
     exit;
 }
 
-
 // Fetch user details based on USERID
-$userid = $_SESSION['USERID'];
-$query = "SELECT NAME, EMAIL FROM users WHERE USERID = ?";
+$userid = $_SESSION['userid'];
+$query = "SELECT USNAME, USEMAIL FROM users WHERE USERID = ?";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("i", $userid);
 $stmt->execute();
@@ -33,22 +49,22 @@ $result = $stmt->get_result();
 $userData = $result->fetch_assoc();
 
 if (!$userData) {
-    echo "<p>User information not found.</p>";
+    echo "<p>Không tìm thấy thông tin người dùng!</p>";
     exit;
 }
-$fullName = $userData['NAME'];
-$email = $userData['EMAIL'];
-?>
 
+$fullName = $userData['USNAME'];
+$email = $userData['USEMAIL'];
+?>
 <!-- Header Start -->
 <div class="container-fluid bg-breadcrumb">
     <div class="container text-center py-5" style="max-width: 900px;">
-        <h3 class="text-white display-3 mb-4">Đặt tour trực tuyến</h1>
-            <ol class="breadcrumb justify-content-center mb-0">
-                <li class="breadcrumb-item"><a href="index.php">Trang chủ</a></li>
-                <li class="breadcrumb-item"><a href="#">Trang</a></li>
-                <li class="breadcrumb-item active text-white">Đặt tour trực tuyến</li>
-            </ol>
+        <h3 class="text-white display-3 mb-4">Đặt tour trực tuyến</h3>
+        <ol class="breadcrumb justify-content-center mb-0">
+            <li class="breadcrumb-item"><a href="index.php">Trang chủ</a></li>
+            <li class="breadcrumb-item"><a href="#">Trang</a></li>
+            <li class="breadcrumb-item active text-white">Đặt tour trực tuyến</li>
+        </ol>
     </div>
 </div>
 <!-- Header End -->
@@ -60,15 +76,11 @@ $email = $userData['EMAIL'];
             <div class="col-lg-6">
                 <h5 class="section-booking-title pe-3">Đặt tour</h5>
                 <h1 class="text-white mb-4">Đặt tour trực tuyến </h1>
-                <p class="text-white mb-4">Đặt tour trực tuyến dễ dàng và nhanh chóng. Hãy chọn tour mà bạn muốn tham gia và cung cấp thông tin cần thiết để hoàn tất đặt chỗ.
-                </p>
-                <p class="text-white mb-4">Hãy chọn tour mà bạn muốn tham gia từ danh sách các tour hiện có. Chúng tôi cung cấp nhiều lựa chọn tour phong phú với điểm đến đa dạng. Mỗi tour đều có chương trình đặc biệt dành riêng cho du khách, bao gồm lịch trình chi tiết, dịch vụ chất lượng và giá cả hợp lý.
-                </p>
-                <!-- <a href="#" class="btn btn-light text-primary rounded-pill py-3 px-5 mt-2">Đọc thêm</a> -->
+                <p class="text-white mb-4">Đặt tour trực tuyến dễ dàng và nhanh chóng. Hãy chọn tour mà bạn muốn tham gia và cung cấp thông tin cần thiết để hoàn tất đặt chỗ.</p>
+                <p class="text-white mb-4">Hãy chọn tour mà bạn muốn tham gia từ danh sách các tour hiện có. Chúng tôi cung cấp nhiều lựa chọn tour phong phú với điểm đến đa dạng. Mỗi tour đều có chương trình đặc biệt dành riêng cho du khách, bao gồm lịch trình chi tiết, dịch vụ chất lượng và giá cả hợp lý.</p>
             </div>
             <div class="col-lg-6">
                 <h1 class="text-white mb-3">Đặt tour du lịch</h1>
-                <!-- <p class="text-white mb-4">Get <span class="text-warning">50% Off</span> On Your First Adventure Trip With Travela. Get More Deal Offers Here.</p> -->
                 <form action="process_booking.php" method="post">
                     <div class="row g-3">
                         <input type="hidden" name="tourid" value="<?php echo $tourId; ?>">
@@ -90,7 +102,6 @@ $email = $userData['EMAIL'];
                                 <label for="datetime">Ngày khởi hành</label>
                             </div>
                         </div>
-
                         <div class="col-md-6">
                             <div class="form-floating">
                                 <input type="text" class="form-control bg-white border-0" id="tourname" name="tourname" value="<?php echo $tourName; ?>" placeholder="Tên Tour" readonly>
@@ -100,7 +111,7 @@ $email = $userData['EMAIL'];
                         <div class="col-md-6">
                             <div class="form-floating">
                                 <input type="number" class="form-control bg-white border-0" id="people_count" name="people_count" min="1" max="30" placeholder="Số lượng người" required>
-                                <label for=" people_count">Số người</label>
+                                <label for="people_count">Số người</label>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -109,12 +120,6 @@ $email = $userData['EMAIL'];
                                 <label for="CategoriesSelect">Giá vé cho 1 người</label>
                             </div>
                         </div>
-                        <!-- <div class="col-12">
-                            <div class="form-floating">
-                                <textarea class="form-control bg-white border-0" placeholder="Special Request" id="message" style="height: 100px"></textarea>
-                                <label for="message">Yêu cầu đặc biệt</label>
-                            </div>
-                        </div> -->
                         <div class="col-12">
                             <button class="btn btn-primary text-white w-100 py-3" type="submit">Đặt ngay</button>
                         </div>

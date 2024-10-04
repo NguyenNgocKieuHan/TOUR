@@ -3,7 +3,6 @@ session_start(); // Bắt đầu phiên làm việc
 
 include('includes/db.php');
 
-
 // Lấy ID địa điểm từ URL
 if (isset($_GET['id'])) {
     $destinationID = intval($_GET['id']);
@@ -18,7 +17,7 @@ if (isset($_GET['id'])) {
     if ($result && mysqli_num_rows($result) > 0) {
         $destination = mysqli_fetch_assoc($result);
     } else {
-        echo "<div class='alert alert-danger'>Địa điểm không tồn tại.</div>";
+        echo "<script>alert('Địa điểm không tồn tại.'); window.location.href='destinationManagement.php';</script>";
         exit();
     }
 
@@ -37,11 +36,11 @@ if (isset($_GET['id'])) {
 
             $check = getimagesize($_FILES['image']['tmp_name']);
             if ($check === false) {
-                echo "<div class='alert alert-danger'>File không phải là ảnh.</div>";
+                echo "<script>alert('File không phải là ảnh.');</script>";
             } elseif ($_FILES['image']['size'] > 5000000) {
-                echo "<div class='alert alert-danger'>Kích thước ảnh quá lớn.</div>";
+                echo "<script>alert('Kích thước ảnh quá lớn.');</script>";
             } elseif (!in_array($imageFileType, $allowedTypes)) {
-                echo "<div class='alert alert-danger'>Chỉ cho phép các định dạng JPG, JPEG, PNG & GIF.</div>";
+                echo "<script>alert('Chỉ cho phép các định dạng JPG, JPEG, PNG & GIF.');</script>";
             } else {
                 $imageData = file_get_contents($_FILES['image']['tmp_name']);
             }
@@ -52,21 +51,20 @@ if (isset($_GET['id'])) {
 
         if ($imageData !== null) {
             // Cập nhật dữ liệu vào cơ sở dữ liệu
-            $query = "UPDATE destination SET DISTRICTID = ?, TOURID = ?, DESTINATIONNAME = ?, IMAGE = ? WHERE DESTINATIONID = ?";
+            $query = "UPDATE destination SET DISTRICTID = ?, TOURID = ?, DENAME = ?, IMAGE = ? WHERE DESTINATIONID = ?";
             $stmt = mysqli_prepare($conn, $query);
             mysqli_stmt_bind_param($stmt, 'iissi', $districtID, $tourID, $destinationName, $imageData, $destinationID);
 
             if (mysqli_stmt_execute($stmt)) {
-                echo "<div class='alert alert-success'>Địa điểm đã được cập nhật thành công!</div>";
-                header("Location: destinationManagement.php");
+                echo "<script>alert('Địa điểm đã được cập nhật thành công!'); window.location.href='destinationManagement.php';</script>";
                 exit();
             } else {
-                echo "<div class='alert alert-danger'>Lỗi: " . mysqli_error($conn) . "</div>";
+                echo "<script>alert('Lỗi: " . mysqli_error($conn) . "');</script>";
             }
         }
     }
 } else {
-    echo "<div class='alert alert-danger'>ID địa điểm không hợp lệ.</div>";
+    echo "<script>alert('ID địa điểm không hợp lệ.'); window.location.href='destinationManagement.php';</script>";
     exit();
 }
 

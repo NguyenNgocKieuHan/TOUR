@@ -1,12 +1,12 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['USERID'])) {
+if (!isset($_SESSION['userid'])) {
     echo "<script>alert('Bạn chưa đăng nhập!'); window.location.href='login.php';</script>";
     exit();
 }
 
-$userid = $_SESSION['USERID']; // Lấy USERID từ session
+$userid = $_SESSION['userid']; // Lấy USERID từ session
 
 // Kiểm tra xem có nhận được TOURID từ form hay không
 if (!isset($_POST['tourid'])) {
@@ -19,7 +19,7 @@ $tourid = $_POST['tourid']; // Lấy TOURID từ form
 include('includes/db.php');
 
 // Kiểm tra xem đơn đặt tour có thuộc về người dùng hiện tại hay không
-$query = "SELECT * FROM bookings WHERE TOURID = ? AND USERID = ?";
+$query = "SELECT * FROM bookings WHERE TOURID = ? AND userid = ?";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("ii", $tourid, $userid);
 $stmt->execute();
@@ -31,7 +31,7 @@ if ($result->num_rows === 0) {
 }
 
 // Cập nhật trạng thái đơn đặt tour thành 'Đã từ chối' (STATUS = 0) và ghi nhận người hủy là khách hàng
-$updateQuery = "UPDATE bookings SET STATUS = 0, CANCELLED_BY = 2 WHERE TOURID = ? AND USERID = ?";
+$updateQuery = "UPDATE bookings SET STATUS = 0, CANCELLED_BY = 2 WHERE TOURID = ? AND userid = ?";
 $stmtUpdate = $conn->prepare($updateQuery);
 $stmtUpdate->bind_param("ii", $tourid, $userid);
 

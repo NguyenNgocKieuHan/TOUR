@@ -38,7 +38,7 @@ if (!isset($_SESSION['ADID'])) {
                     </thead>
                     <tbody>
                         <?php
-                        $query = "SELECT d.DESTINATIONID, c.CITYNAME, q.DISTRICTNAME, d.DESTINATIONNAME, d.IMAGE
+                        $query = "SELECT d.DESTINATIONID, c.CITYNAME, q.DISTRICTNAME, d.DENAME, d.IMAGE
                                   FROM DESTINATION d
                                   JOIN DISTRICT q ON d.DISTRICTID = q.DISTRICTID
                                   JOIN CITY c ON q.CITYID = c.CITYID";
@@ -50,7 +50,7 @@ if (!isset($_SESSION['ADID'])) {
                             echo "<th scope='row'>" . $counter . "</th>";
                             echo "<td>" . $row['CITYNAME'] . "</td>";
                             echo "<td>" . $row['DISTRICTNAME'] . "</td>";
-                            echo "<td>" . $row['DESTINATIONNAME'] . "</td>";
+                            echo "<td>" . $row['DENAME'] . "</td>";
                             echo "<td><img src='data:image/jpeg;base64," . base64_encode($row['IMAGE']) . "' alt='Ảnh' style='width: 100px;'></td>";
                             // echo "<td><img src='" . $row['IMAGE'] . "' alt='Ảnh' style='width: 100px;'></td>";
                             echo "<td>

@@ -1,52 +1,45 @@
 <?php
-session_start();
+session_start(); // Bắt đầu phiên làm việc (session)
+include('includes/header.php'); // Khai báo với MySQL
 
-include('includes/header.php');
-
-// Kết nối cơ sở dữ liệu
-$host = 'localhost';
-$dbname = 'tour';
-$username = 'root';
-$password = '';
-
-try {
-    $conn = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password);
-    // Thiết lập chế độ lỗi của PDO là Exception
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    die("Connection failed: " . $e->getMessage());
-}
-
-
-// Xử lý khi form được gửi đi
+include('includes/db.php'); // Kết nối cơ sở dữ liệu
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Lấy dữ liệu từ form
-    $email = $_POST['email'];
-    $password = $_POST['password'];
+    // Lấy dữ liệu từ form đăng nhập
+    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $password = mysqli_real_escape_string($conn, $_POST['password']);
 
     // Kiểm tra xem email có tồn tại trong cơ sở dữ liệu không
-    $stmt = $conn->prepare("SELECT * FROM users WHERE USEMAIL = :email");
-    $stmt->bindParam(':email', $email);
+    $sql = "SELECT * FROM users WHERE USEMAIL = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $email);
     $stmt->execute();
+    $result = $stmt->get_result();
 
-    // Nếu người dùng tồn tại
-    if ($stmt->rowCount() > 0) {
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    if ($result->num_rows > 0) {
+        // Lấy thông tin người dùng
+        $user = $result->fetch_assoc();
 
-        // Kiểm tra mật khẩu đã được băm bằng password_hash
+        // Kiểm tra mật khẩu
         if (password_verify($password, $user['USPASSWORD'])) {
-            // Lưu thông tin vào session
-            $_SESSION['USERID'] = $user['USERID'];
-            $_SESSION['USNAME'] = $user['USNAME'];
+            // Lưu thông tin người dùng vào session
+            $_SESSION['userid'] = $user['USERID'];
+            $_SESSION['username'] = $user['USNAME'];
 
-            header("Location: index.php");
-            exit();
+            // Chuyển hướng người dùng đến trang chủ hoặc trang quản lý
+            echo "<script>alert('Đăng nhập thành công!'); window.location.href='index.php';</script>";
         } else {
-            echo "Sai mật khẩu. Vui lòng thử lại!";
+            echo "<script>alert('Mật khẩu không chính xác!');</script>";
         }
+    } else {
+        echo "<script>alert('Email không tồn tại!');</script>";
     }
+
+    // Đóng kết nối
+    $stmt->close();
+    $conn->close();
 }
 ?>
+
 <!-- Header Start -->
 <div class="container-fluid bg-breadcrumb">
     <div class="container text-center py-5" style="max-width: 900px;">

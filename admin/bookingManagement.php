@@ -69,7 +69,7 @@ $result = $stmt->get_result(); // Lấy kết quả
 
                                 echo "<tr>";
                                 echo "<td>" . htmlspecialchars($row['USERNAME']) . "</td>";
-                                echo "<td>" . htmlspecialchars($row['EMAIL']) . "</td>";
+                                echo "<td>" . htmlspecialchars($row['USEMAIL']) . "</td>";
                                 echo "<td>" . htmlspecialchars($row['TOURNAME']) . "</td>";
                                 echo "<td>" . htmlspecialchars($row['BOOKINGDATE']) . "</td>";
                                 echo "<td>" . htmlspecialchars($row['NUMOFPEOPLE']) . "</td>";

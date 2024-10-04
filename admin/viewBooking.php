@@ -4,22 +4,22 @@ include('includes/header.php');
 include('includes/db.php');
 
 // Kiểm tra nếu người dùng đã đăng nhập
-if (!isset($_SESSION['USERID'])) {
+if (!isset($_SESSION['ADID'])) {
     header("Location: login.php");
     exit();
 }
 
 // Kiểm tra xem TOURID và USERID có được truyền vào không
-if (isset($_GET['tourid']) && isset($_SESSION['USERID'])) {
+if (isset($_GET['tourid']) && isset($_SESSION['ADID'])) {
     $tourId = intval($_GET['tourid']);
-    $userId = $_SESSION['USERID'];
+    $userId = $_SESSION['ADID'];
 
     // In ra giá trị để kiểm tra
     echo "Tour ID: $tourId<br>";
     echo "User ID: $userId<br>";
 
     // Truy vấn để lấy thông tin booking
-    $sql = "SELECT b.BOOKINGDATE, b.NUMOFPEOPLE, b.TOTALPRICE, b.STATUS, b.REJECTION_REASON, t.TOURNAME, u.NAME, u.EMAIL,b.TOURID,b.USERID
+    $sql = "SELECT b.BOOKINGDATE, b.NUMOFPEOPLE, b.TOTALPRICE, b.STATUS, b.REJECTION_REASON, t.TOURNAME, u.USNAME, u.USEMAIL,b.TOURID,b.USERID
             FROM bookings b
             JOIN tour t ON b.TOURID = t.TOURID
             JOIN users u ON b.USERID = u.USERID
@@ -73,8 +73,8 @@ $conn->close();
                         <?php } ?>
                     </div>
                     <div class="col-md-6">
-                        <p><strong>Tên Người Đặt:</strong> <?php echo htmlspecialchars($row['NAME']); ?></p>
-                        <p><strong>Email:</strong> <?php echo htmlspecialchars($row['EMAIL']); ?></p>
+                        <p><strong>Tên Người Đặt:</strong> <?php echo htmlspecialchars($row['USNAME']); ?></p>
+                        <p><strong>Email:</strong> <?php echo htmlspecialchars($row['USEMAIL']); ?></p>
                     </div>
                 </div>
             </div>

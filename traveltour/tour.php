@@ -85,8 +85,13 @@ function truncateDescription($description, $length = 100)
                                     <a href="tour_detail.php?tourid=<?php echo $tourId; ?>" class="my-autobtn-hover btn text-white py-2 px-4">Xem thêm</a>
                                 </div>
                                 <div class="col-6 text-end px-0">
-                                    <a href="booking.php?tourid=<?php echo $tourId; ?>&tourname=<?php echo urlencode($tourName); ?>&price=<?php echo $price; ?>" class="btn-hover btn text-white py-2 px-4">Đặt ngay</a>
+                                    <?php if (isset($_SESSION['USERID'])): ?>
+                                        <a href="booking.php?tourid=<?php echo $tourId; ?>&tourname=<?php echo urlencode($tourName); ?>&price=<?php echo $price; ?>" class="btn-hover btn text-white py-2 px-4">Đặt ngay</a>
+                                    <?php else: ?>
+                                        <a href="login.php?redirect=booking.php?tourid=<?php echo $tourId; ?>&tourname=<?php echo urlencode($tourName); ?>&price=<?php echo $price; ?>" class="btn-hover btn text-white py-2 px-4">Đặt ngay</a>
+                                    <?php endif; ?>
                                 </div>
+
                             </div>
                         </div>
                     </div>

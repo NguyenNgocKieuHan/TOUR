@@ -1,6 +1,3 @@
-<?php
-// session_start();
-?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -65,36 +62,25 @@
             <div class="col-lg-4 text-center text-lg-end">
 
                 <div class="d-inline-flex align-items-center" style="height: 45px;">
-                    <?php if (isset($_SESSION['USERID'])): ?>
-                        <!-- Hiển thị dropdown khi người dùng đã đăng nhập -->
+                    <?php
+                    if (isset($_SESSION['userid'])): ?>
                         <div class="dropdown">
                             <a href="#" class="dropdown-toggle text-light" data-bs-toggle="dropdown">
-                                <?php
-                                // Kiểm tra usertype và hiển thị thông tin tương ứng
-                                if ($_SESSION['USERID']): ?>
-                                    <small><i class="fa fa-home me-2"></i> Xin chào, <?php echo htmlspecialchars($_SESSION['USNAME']); ?></small>
-
-                                <?php endif; ?>
+                                <small><i class="fa fa-home me-2"></i> Xin chào, <?php echo htmlspecialchars($_SESSION['username']); ?></small>
                             </a>
                             <div class="dropdown-menu rounded">
-                                <?php if ($_SESSION['USERID']): ?>
-                                    <a href="profile.php" class="dropdown-item"><i class="fas fa-user-alt me-2"></i> Hồ sơ của tôi</a>
-                                    <a href="" class="dropdown-item"><i class="fas fa-comment-alt me-2"></i> Hộp thư đến</a>
-                                    <a href="booking_history.php" class="dropdown-item"><i class="fas fa-shopping-cart me-2"></i> Lịch sử đặt tour</a>
-                                    <a href="booking_status.php" class="dropdown-item"><i class="fas fa-bell me-2"></i> Thông báo</a>
-                                    <a href="#" class="dropdown-item"><i class="fas fa-cog me-2"></i> Cài đặt tài khoản</a>
-                                    <a href="logout.php" class="dropdown-item"><i class="fas fa-sign-out-alt me-2"></i> Đăng xuất</a>
-                                <?php else: ?>
-                                    <a href="logout.php" class="dropdown-item"><i class="fas fa-sign-out-alt me-2"></i> Đăng xuất</a>
-                                    <a href="error.php" class="dropdown-item text-danger"><i class="fas fa-exclamation-triangle me-2"></i> Không phải là tư cách khách hàng</a>
-                                <?php endif; ?>
+                                <a href="profile.php" class="dropdown-item"><i class="fas fa-user-alt me-2"></i> Hồ sơ của tôi</a>
+                                <a href="booking_history.php" class="dropdown-item"><i class="fas fa-shopping-cart me-2"></i> Lịch sử đặt tour</a>
+                                <a href="booking_status.php" class="dropdown-item"><i class="fas fa-bell me-2"></i> Thông báo</a>
+                                <a href="#" class="dropdown-item"><i class="fas fa-cog me-2"></i> Cài đặt tài khoản</a>
+                                <a href="logout.php" class="dropdown-item"><i class="fas fa-sign-out-alt me-2"></i> Đăng xuất</a>
                             </div>
                         </div>
                     <?php else: ?>
-                        <!-- Hiển thị nút Đăng ký và Đăng nhập nếu chưa đăng nhập -->
                         <a href="register.php"><small class="me-3 text-light"><i class="fa fa-user me-2"></i>Đăng ký</small></a>
                         <a href="login.php"><small class="me-3 text-light"><i class="fa fa-sign-in-alt me-2"></i>Đăng nhập</small></a>
                     <?php endif; ?>
+
                 </div>
 
             </div>

@@ -54,7 +54,10 @@ if (!isset($_SESSION['ADID'])) {
                             ?>
                         </select>
                     </div>
-
+                    <div class="form-group">
+                        <label for="description">Mô tả:</label>
+                        <textarea type="text" name="description" id="description" class="form-control" required></textarea>
+                    </div>
                     <div class="form-group">
                         <label for="image">Chọn ảnh:</label>
                         <input type="file" name="image" id="image" class="form-control" required accept="image/*">

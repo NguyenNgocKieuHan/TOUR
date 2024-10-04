@@ -1,13 +1,17 @@
 <?php
+session_start();
 include('includes/db.php');
 
-// Lấy dữ liệu từ form đặt tour
-if (
-    $_SERVER['REQUEST_METHOD'] == 'POST'
-) {
+// Kiểm tra người dùng đã đăng nhập hay chưa
+if (!isset($_SESSION['userid'])) {
+    echo "<script>alert('Bạn chưa đăng nhập!'); window.location.href='login.php';</script>";
+    exit();
+}
 
+// Lấy dữ liệu từ form đặt tour
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $tourID = $_POST['tourid'];
-    $userID = $_SESSION['USERID'];
+    $userID = $_SESSION['userid']; // Đảm bảo tên biến đúng là 'userid'
     $numOfPeople = $_POST['people_count'];
     $startDate = $_POST['startdate']; // Ngày khởi hành được người dùng chọn
 
@@ -21,7 +25,7 @@ if (
     $stmt->close();
 
     // Truy vấn để tính tổng số người đã đặt chỗ cho tour đó (chỉ tính những booking đã được duyệt)
-    $sqlTotalPeople = "SELECT SUM(NUMOFPEOPLE) AS totalPeople FROM bookings WHERE TOURID = ? AND STATUS = 'Approved'";
+    $sqlTotalPeople = "SELECT COALESCE(SUM(NUMOFPEOPLE), 0) AS totalPeople FROM bookings WHERE TOURID = ? AND STATUS = 'Approved'";
     $stmt = $conn->prepare($sqlTotalPeople);
     $stmt->bind_param("i", $tourID);
     $stmt->execute();
@@ -31,43 +35,42 @@ if (
 
     // Kiểm tra nếu còn đủ slot
     if (($totalPeople + $numOfPeople) <= $maxSlots) {
-        // Truy vấn kiểm tra xem người dùng đã đặt tour này vào cùng một ngày khởi hành chưa
-        $sqlCheckDuplicate = "SELECT * FROM bookings WHERE TOURID = ? AND USERID = ? AND STARTDATE = ?";
+        // Truy vấn kiểm tra xem có booking nào đã tồn tại vào cùng một ngày khởi hành
+        $sqlCheckDuplicate = "SELECT * FROM bookings WHERE TOURID = ? AND STARTDATE = ?";
         $stmt = $conn->prepare($sqlCheckDuplicate);
-        $stmt->bind_param("iis", $tourID, $userID, $startDate);
+        $stmt->bind_param("is", $tourID, $startDate);
         $stmt->execute();
         $stmt->store_result();
 
         if ($stmt->num_rows > 0) {
-            // Nếu có bản ghi trùng lặp, thông báo cho người dùng
-            echo "Bạn đã đặt tour này vào ngày đó. Vui lòng kiểm tra thông tin đặt tour của bạn.";
+            // Nếu có bản ghi trùng lặp cho tour vào cùng một ngày khởi hành
+            echo "<script>alert('Tour này đã được đặt vào ngày đó. Vui lòng kiểm tra thông tin đặt tour của bạn.'); window.location.href='list_tours.php';</script>";
+            exit(); // Ngăn không cho tiếp tục thực hiện truy vấn thêm
         } else {
             // Nếu không có trùng lặp, thực hiện việc đặt tour
             $bookingDate = date("Y-m-d"); // Ngày đặt tour hiện tại
             $totalPrice = $numOfPeople * $tourPrice; // Tính tổng giá tiền dựa trên số người đặt
-            $status = 'Chờ xác nhận'; // Trạng thái ban đầu là 'Chờ xác nhận'
+            $status = '2'; // Trạng thái ban đầu là 'Chờ xác nhận'
 
             // Chuẩn bị truy vấn để thêm thông tin đặt tour vào bảng bookings
             $sqlInsertBooking = "INSERT INTO bookings (TOURID, USERID, BOOKINGDATE, NUMOFPEOPLE, TOTALPRICE, STATUS, STARTDATE)
-    VALUES (?, ?, ?, ?, ?, ?, ?)";
+                                 VALUES (?, ?, ?, ?, ?, ?, ?)";
             $stmt = $conn->prepare($sqlInsertBooking);
-            $stmt->bind_param("iisidss", $tourID, $userID, $bookingDate, $numOfPeople, $totalPrice, $status, $startDate);
+            $stmt->bind_param("iissdss", $tourID, $userID, $bookingDate, $numOfPeople, $totalPrice, $status, $startDate);
 
             // Thực thi truy vấn
             if ($stmt->execute()) {
-                echo "Đặt tour thành công! Vui lòng chờ xác nhận từ quản lý.";
+                echo "<script>alert('Đặt tour thành công! Vui lòng chờ xác nhận từ quản lý.'); window.location.href='booking_success.php';</script>";
             } else {
-                echo "Lỗi: Không thể đặt tour. Vui lòng thử lại sau.";
+                echo "<script>alert('Lỗi: Không thể đặt tour. Vui lòng thử lại sau.');</script>";
             }
+            $stmt->close();
         }
-        $stmt->close();
     } else {
         // Thông báo hết chỗ và đưa ra 2 lựa chọn cho người dùng
-        echo "Xin lỗi, tour này đã hết chỗ!";
-        echo "<br>Bạn có thể:";
-        echo "<ul>
-        <li><a href='list_tours.php'>Đổi sang tour khác</a></li>
-        <li><a href='reschedule_tour.php?tourID=$tourID'>Dời sang ngày khác</a></li>
-    </ul>";
+        echo "<script>
+                alert('Xin lỗi, tour này đã hết chỗ!');
+                window.location.href='list_tours.php';
+                </script>";
     }
 }

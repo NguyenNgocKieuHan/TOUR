@@ -1,20 +1,19 @@
 <?php
 session_start();
 
-// Kiểm tra xem người dùng đã đăng nhập chưa
-if (!isset($_SESSION['USERID'])) {
+// Kiểm tra người dùng đã đăng nhập hay chưa
+if (!isset($_SESSION['userid'])) {
     echo "<script>alert('Bạn chưa đăng nhập!'); window.location.href='login.php';</script>";
     exit();
 }
-
-$userid = $_SESSION['USERID']; // Lấy USERID từ session
+$userid = $_SESSION['userid']; // Lấy USERID từ session
 $activate = "booking_history";
 
 include('includes/header.php');
 include('includes/db.php');
 
 // Truy vấn để lấy thông tin người dùng
-$userQuery = "SELECT NAME, EMAIL, SDT FROM USERS WHERE USERID = ?";
+$userQuery = "SELECT USNAME,USEMAIL, USSDT FROM USERS WHERE userid = ?";
 $stmtUser = $conn->prepare($userQuery);
 $stmtUser->bind_param("i", $userid);
 $stmtUser->execute();
@@ -52,9 +51,9 @@ $historyResult = $stmtHistory->get_result();
     <?php if ($user) { ?>
         <div class="mb-4">
             <h4>Thông tin khách hàng</h4>
-            <p>Tên: <?php echo htmlspecialchars($user['NAME']); ?></p>
-            <p>Email: <?php echo htmlspecialchars($user['EMAIL']); ?></p>
-            <p>Số điện thoại: <?php echo htmlspecialchars($user['SDT']); ?></p>
+            <p>Tên: <?php echo htmlspecialchars($user['USNAME']); ?></p>
+            <p>Email: <?php echo htmlspecialchars($user['USEMAIL']); ?></p>
+            <p>Số điện thoại: <?php echo htmlspecialchars($user['USSDT']); ?></p>
         </div>
     <?php } ?>
 

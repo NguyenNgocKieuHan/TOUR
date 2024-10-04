@@ -56,10 +56,14 @@ if (isset($_GET['id'])) {
                     </div>
                     <div class="form-group">
                         <label for="destination_name">Tên địa điểm:</label>
-                        <input type="text" name="destination_name" id="destination_name" class="form-control" value="<?php echo htmlspecialchars($destination['DESTINATIONNAME']); ?>" required>
+                        <input type="text" name="destination_name" id="destination_name" class="form-control" value="<?php echo htmlspecialchars($destination['DENAME']); ?>" required>
                     </div>
                     <div class="form-group">
-                        <label for="tour_id">Tên Tour:</label>
+                        <label for="description">Mô tả:</label>
+                        <textarea name="description" id="description" class="form-control" required><?php echo htmlspecialchars($destination['DEDESCRIPTION']); ?></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="tour_id">Có trong Tour:</label>
                         <select name="tour_id" id="tour_id" class="form-control" required>
                             <?php
                             // Fetch tours from the database
