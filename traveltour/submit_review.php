@@ -4,12 +4,12 @@ session_start();
 include('includes/db.php'); // Bao gồm tệp kết nối cơ sở dữ liệu
 
 // Check if the user is logged in
-if (!isset($_SESSION['USERID'])) {
+if (!isset($_SESSION['userid'])) {
     die("Bạn phải đăng nhập để gửi đánh giá.");
 }
 
 // Get the form data
-$userid = $_SESSION['USERID']; // Lấy USERID từ session
+$userid = $_SESSION['userid']; // Lấy USERID từ session
 $tourid = $_POST['tourid'];
 $rating = $_POST['rating'];
 $comment = $_POST['comment'];
@@ -57,11 +57,11 @@ if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
 // Insert review into the database
 if ($imagePath) {
     // Nếu có hình ảnh, thêm vào cột REVIEWIMAGE
-    $reviewInsert = $conn->prepare("INSERT INTO reviews (USERID, TOURID, RATING, COMMENT, POSTDATE, REVIEWIMAGE) VALUES (?, ?, ?, ?, NOW(), ?)");
+    $reviewInsert = $conn->prepare("INSERT INTO reviews (userid, TOURID, RATING, COMMENT, POSTDATE, REVIEWIMAGE) VALUES (?, ?, ?, ?, NOW(), ?)");
     $reviewInsert->bind_param("iiiss", $userid, $tourid, $rating, $comment, $imagePath);
 } else {
     // Nếu không có hình ảnh, không bao gồm REVIEWIMAGE
-    $reviewInsert = $conn->prepare("INSERT INTO reviews (USERID, TOURID, RATING, COMMENT, POSTDATE) VALUES (?, ?, ?, ?, NOW())");
+    $reviewInsert = $conn->prepare("INSERT INTO reviews (userid, TOURID, RATING, COMMENT, POSTDATE) VALUES (?, ?, ?, ?, NOW())");
     $reviewInsert->bind_param("iiis", $userid, $tourid, $rating, $comment);
 }
 

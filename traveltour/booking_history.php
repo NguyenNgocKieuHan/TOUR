@@ -13,7 +13,7 @@ include('includes/header.php');
 include('includes/db.php');
 
 // Truy vấn để lấy thông tin người dùng
-$userQuery = "SELECT USNAME,USEMAIL, USSDT FROM USERS WHERE userid = ?";
+$userQuery = "SELECT USNAME, USEMAIL, USSDT FROM USERS WHERE userid = ?";
 $stmtUser = $conn->prepare($userQuery);
 $stmtUser->bind_param("i", $userid);
 $stmtUser->execute();
@@ -21,11 +21,11 @@ $userResult = $stmtUser->get_result();
 $user = $userResult->fetch_assoc();
 
 // Truy vấn để lấy lịch sử đặt tour
-$historyQuery = "SELECT b.TOURID, t.TOURNAME, b.BOOKINGDATE, b.NUMOFPEOPLE, b.TOTALPRICE, b.STATUS, b.CANCELLED_BY, b.REJECTION_REASON
+$historyQuery = "SELECT b.TOURID, t.TOURNAME, b.BOOKINGDATE, b.NUMOFPEOPLE, b.TOTALPRICE, b.STATUS, b.STARTDATE, b.CANCELLED_BY, b.REJECTION_REASON
                  FROM bookings b
-                 JOIN TOUR t ON b.TOURID = t.TOURID
+                 JOIN tour t ON b.TOURID = t.TOURID
                  WHERE b.USERID = ? 
-                 ORDER BY b.BOOKINGDATE DESC";
+                 ORDER BY b.BOOKINGDATE DESC"; // Sắp xếp theo ngày đặt tour từ mới nhất đến cũ nhất
 $stmtHistory = $conn->prepare($historyQuery);
 $stmtHistory->bind_param("i", $userid);
 $stmtHistory->execute();
@@ -61,9 +61,10 @@ $historyResult = $stmtHistory->get_result();
         <table class="table table-bordered table-striped">
             <thead>
                 <tr>
-                    <th>Mã Tour</th>
+                    <!-- <th>Mã Tour</th> -->
                     <th>Tên Tour</th>
                     <th>Ngày Đặt</th>
+                    <th>Ngày Khởi Hành</th>
                     <th>Số Người</th>
                     <th>Tổng Giá</th>
                     <th>Trạng Thái</th>
@@ -73,9 +74,9 @@ $historyResult = $stmtHistory->get_result();
             <tbody>
                 <?php while ($row = $historyResult->fetch_assoc()) { ?>
                     <tr>
-                        <td><?php echo $row['TOURID']; ?></td>
                         <td><?php echo htmlspecialchars($row['TOURNAME']); ?></td>
                         <td><?php echo date('d/m/Y', strtotime($row['BOOKINGDATE'])); ?></td>
+                        <td><?php echo date('d/m/Y', strtotime($row['STARTDATE'])); ?></td>
                         <td><?php echo $row['NUMOFPEOPLE']; ?></td>
                         <td><?php echo number_format($row['TOTALPRICE'], 0, ',', '.') . ' VND'; ?></td>
                         <td>
