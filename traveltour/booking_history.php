@@ -6,6 +6,7 @@ if (!isset($_SESSION['userid'])) {
     echo "<script>alert('Bạn chưa đăng nhập!'); window.location.href='login.php';</script>";
     exit();
 }
+
 $userid = $_SESSION['userid']; // Lấy USERID từ session
 $activate = "booking_history";
 
@@ -61,7 +62,6 @@ $historyResult = $stmtHistory->get_result();
         <table class="table table-bordered table-striped">
             <thead>
                 <tr>
-                    <!-- <th>Mã Tour</th> -->
                     <th>Tên Tour</th>
                     <th>Ngày Đặt</th>
                     <th>Ngày Khởi Hành</th>
@@ -75,8 +75,8 @@ $historyResult = $stmtHistory->get_result();
                 <?php while ($row = $historyResult->fetch_assoc()) { ?>
                     <tr>
                         <td><?php echo htmlspecialchars($row['TOURNAME']); ?></td>
-                        <td><?php echo date('d/m/Y', strtotime($row['BOOKINGDATE'])); ?></td>
-                        <td><?php echo date('d/m/Y', strtotime($row['STARTDATE'])); ?></td>
+                        <td><?php echo htmlspecialchars($row['BOOKINGDATE']); ?></td>
+                        <td><?php echo htmlspecialchars($row['STARTDATE']); ?></td>
                         <td><?php echo $row['NUMOFPEOPLE']; ?></td>
                         <td><?php echo number_format($row['TOTALPRICE'], 0, ',', '.') . ' VND'; ?></td>
                         <td>

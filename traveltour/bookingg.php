@@ -2,10 +2,10 @@
 session_start();
 
 // Check if user is logged in
-// if (!isset($_SESSION['USERID'])) {
-//     echo "<script>alert('Bạn chưa đăng nhập!'); window.location.href='login.php';</script>";
-//     exit();
-// }
+if (!isset($_SESSION['userid'])) {
+    echo "<script>alert('Bạn chưa đăng nhập!'); window.location.href='login.php';</script>";
+    exit();
+}
 
 $activate = "booking";
 
@@ -23,6 +23,22 @@ if ($result->num_rows > 0) {
     }
 }
 
+// Fetch user details based on USERID
+$userid = $_SESSION['userid'];
+$query = "SELECT USNAME, USEMAIL FROM users WHERE USERID = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("i", $userid);
+$stmt->execute();
+$result = $stmt->get_result();
+$userData = $result->fetch_assoc();
+
+if (!$userData) {
+    echo "<p>Không tìm thấy thông tin người dùng!</p>";
+    exit;
+}
+
+$fullName = $userData['USNAME'];
+$email = $userData['USEMAIL'];
 $conn->close();
 ?>
 <!-- Header Start -->
@@ -51,17 +67,17 @@ $conn->close();
 
             <div class="col-lg-6">
                 <h1 class="text-white mb-3">Đặt tour du lịch</h1>
-                <form action="process_booking.php" method="POST">
+                <form action="process_bookingg.php" method="POST">
                     <div class="row g-3">
                         <div class="col-md-6">
                             <div class="form-floating">
-                                <input type="text" class="form-control bg-white border-0" id="name" name="name" placeholder="Họ và tên" required>
+                                <input type="text" class="form-control bg-white border-0" id="name" name="name" value="<?php echo $fullName; ?>" readonly>
                                 <label for="name">Họ và tên</label>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-floating">
-                                <input type="email" class="form-control bg-white border-0" id="email" name="email" placeholder="Email" required>
+                                <input type="email" class="form-control bg-white border-0" id="email" name="email" value="<?php echo $email; ?>" readonly>
                                 <label for="email">Email</label>
                             </div>
                         </div>
@@ -76,7 +92,7 @@ $conn->close();
                                 <select id="tourDropdown" class="form-select bg-white border-0" name="tourid">
                                     <option value="">Chọn tour</option>
                                     <?php foreach ($tours as $tour) { ?>
-                                        <option value="<?php echo $tour['TOURID']; ?>" data-price="<?php echo $tour['PRICE']; ?>">
+                                        <option value="<?php echo $tour['TOURID']; ?>" data-price="<?php echo number_format($tour['PRICE'], 0, ',', '.') . " " . "VNĐ"; ?>">
                                             <?php echo htmlspecialchars($tour['TOURNAME']); ?>
                                         </option>
                                     <?php } ?>

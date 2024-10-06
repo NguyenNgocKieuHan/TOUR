@@ -111,13 +111,14 @@
                             <!-- <a href="destination.php" class="dropdown-item ">Điểm đến</a> -->
                             <!-- <a href="tour.php" class="dropdown-item ">Khám phá Tour</a> -->
                             <a href="gallery.php" class="dropdown-item">Thư viện ảnh</a>
-                            <a href="guides.php" class="dropdown-item">Hướng dẫn du lịch</a>
-                            <a href="testimonial.php" class="dropdown-item">Lời chứng thực</a>
+                            <!-- <a href="guides.php" class="dropdown-item">Hướng dẫn du lịch</a> -->
+                            <!-- <a href="testimonial.php" class="dropdown-item">Lời chứng thực</a> -->
                             <!-- <a href="404.php" class="dropdown-item">404 Page</a> -->
                         </div>
                     </div>
                 </div>
                 <li class="btn btn-primary rounded-pill py-2 px-4 ms-lg-4 active <?php echo ($activate == "booking" ? "active" : "") ?>"><a href="bookingg.php" class="nav-link">Đặt tour</a></li>
+
             </div>
         </nav>
     </div>

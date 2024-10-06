@@ -38,27 +38,38 @@ if (!isset($_SESSION['ADID'])) {
                     </thead>
                     <tbody>
                         <?php
+                        // Truy vấn và sắp xếp kết quả theo DESTINATIONID từ lớn đến nhỏ
                         $query = "SELECT d.DESTINATIONID, c.CITYNAME, q.DISTRICTNAME, d.DENAME, d.IMAGE
                                   FROM DESTINATION d
                                   JOIN DISTRICT q ON d.DISTRICTID = q.DISTRICTID
-                                  JOIN CITY c ON q.CITYID = c.CITYID";
-                        $result = mysqli_query($conn, $query);
-                        $counter = 1;
+                                  JOIN CITY c ON q.CITYID = c.CITYID
+                                  ORDER BY d.DESTINATIONID DESC";
 
-                        while ($row = mysqli_fetch_assoc($result)) {
-                            echo "<tr>";
-                            echo "<th scope='row'>" . $counter . "</th>";
-                            echo "<td>" . $row['CITYNAME'] . "</td>";
-                            echo "<td>" . $row['DISTRICTNAME'] . "</td>";
-                            echo "<td>" . $row['DENAME'] . "</td>";
-                            echo "<td><img src='data:image/jpeg;base64," . base64_encode($row['IMAGE']) . "' alt='Ảnh' style='width: 100px;'></td>";
-                            // echo "<td><img src='" . $row['IMAGE'] . "' alt='Ảnh' style='width: 100px;'></td>";
-                            echo "<td>
-                                    <a href='editDestination.php?id=" . $row['DESTINATIONID'] . "' class='btn btn-info btn-sm'><i class='fa fa-edit'></i> Sửa</a>
-                                    <a href='deleteDestination.php?id=" . $row['DESTINATIONID'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"Bạn có chắc chắn muốn xóa không?\");'><i class='fa fa-trash'></i> Xóa</a>
-                                  </td>";
-                            echo "</tr>";
-                            $counter++;
+                        $result = mysqli_query($conn, $query);
+
+                        // Đếm tổng số bản ghi
+                        $totalRows = mysqli_num_rows($result);
+
+                        // Kiểm tra có dữ liệu không
+                        if ($totalRows > 0) {
+                            $counter = $totalRows; // Bắt đầu từ tổng số bản ghi và đếm ngược
+
+                            while ($row = mysqli_fetch_assoc($result)) {
+                                echo "<tr>";
+                                echo "<th scope='row'>" . $counter . "</th>"; // Hiển thị số thứ tự ngược
+                                echo "<td>" . htmlspecialchars($row['CITYNAME']) . "</td>";
+                                echo "<td>" . htmlspecialchars($row['DISTRICTNAME']) . "</td>";
+                                echo "<td>" . htmlspecialchars($row['DENAME']) . "</td>";
+                                echo "<td><img src='data:image/jpeg;base64," . base64_encode($row['IMAGE']) . "' alt='Ảnh' style='width: 100px;'></td>";
+                                echo "<td>
+                                        <a href='editDestination.php?id=" . $row['DESTINATIONID'] . "' class='btn btn-info btn-sm'><i class='fa fa-edit'></i> Sửa</a>
+                                        <a href='deleteDestination.php?id=" . $row['DESTINATIONID'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"Bạn có chắc chắn muốn xóa không?\");'><i class='fa fa-trash'></i> Xóa</a>
+                                      </td>";
+                                echo "</tr>";
+                                $counter--; // Giảm số thứ tự sau mỗi lần lặp
+                            }
+                        } else {
+                            echo "<tr><td colspan='6' class='text-center'>Không có địa điểm nào để hiển thị.</td></tr>";
                         }
                         ?>
                     </tbody>
@@ -67,6 +78,7 @@ if (!isset($_SESSION['ADID'])) {
         </div>
     </div>
 </div>
+
 <!-- js -->
 <script src="vendors/scripts/core.js"></script>
 <script src="vendors/scripts/script.min.js"></script>

@@ -9,32 +9,29 @@ if (!isset($_SESSION['ADID'])) {
     exit();
 }
 
-// Kiểm tra xem TOURID và USERID có được truyền vào không
-if (isset($_GET['tourid']) && isset($_SESSION['ADID'])) {
+// Kiểm tra xem TOURID và STARTDATE có được truyền vào không
+if (isset($_GET['tourid'], $_GET['startdate']) && isset($_SESSION['ADID'])) {
     $tourId = intval($_GET['tourid']);
     $userId = $_SESSION['ADID'];
+    $startDate = $_GET['startdate']; // Lấy giá trị STARTDATE từ GET
 
-    // In ra giá trị để kiểm tra
-    echo "Tour ID: $tourId<br>";
-    echo "User ID: $userId<br>";
-
-    // Truy vấn để lấy thông tin booking
-    $sql = "SELECT b.BOOKINGDATE, b.NUMOFPEOPLE, b.TOTALPRICE, b.STATUS, b.REJECTION_REASON, t.TOURNAME, u.USNAME, u.USEMAIL,b.TOURID,b.USERID
+    // Truy vấn để lấy thông tin booking dựa trên TOURID, USERID và STARTDATE
+    $sql = "SELECT b.BOOKINGDATE, b.NUMOFPEOPLE, b.STARTDATE, b.TOTALPRICE, b.STATUS, b.REJECTION_REASON, 
+                   t.TOURNAME, u.USNAME, u.USEMAIL
             FROM bookings b
             JOIN tour t ON b.TOURID = t.TOURID
             JOIN users u ON b.USERID = u.USERID
-            WHERE b.TOURID = ? AND b.USERID = ?";
+            WHERE b.TOURID = ? AND b.USERID = ? AND b.STARTDATE = ? LIMIT 1"; // Giới hạn kết quả về 1 bản ghi
+
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ii", $tourId, $userId);
+    $stmt->bind_param("iis", $tourId, $userId, $startDate); // Bind với STARTDATE
     $stmt->execute();
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-        $statusText = ($row['STATUS'] == 1) ? 'Đã xác nhận' : ($row['STATUS'] == 0 ? 'Đã từ chối' : 'Chưa xác nhận');
-        $rejectionReason = $row['REJECTION_REASON'] ? htmlspecialchars($row['REJECTION_REASON']) : 'N/A';
+        $row = $result->fetch_assoc(); // Chỉ lấy 1 bản ghi
     } else {
-        echo "Không tìm thấy thông tin booking cho TOURID: $tourId và USERID: $userId";
+        echo "Không tìm thấy thông tin booking cho TOURID: $tourId, USERID: $userId và STARTDATE: $startDate";
         exit();
     }
     $stmt->close();
@@ -66,11 +63,11 @@ $conn->close();
                         <p><strong>Ngày Đặt:</strong> <?php echo htmlspecialchars($row['BOOKINGDATE']); ?></p>
                         <p><strong>Số Người:</strong> <?php echo htmlspecialchars($row['NUMOFPEOPLE']); ?></p>
                         <p><strong>Tổng Giá:</strong> <?php echo number_format($row['TOTALPRICE'], 0, ',', '.') . " VNĐ"; ?></p>
-                        <p><strong>Trạng Thái:</strong> <?php echo htmlspecialchars($statusText); ?></p>
-                        <?php if ($row['STATUS'] == 0) { // Chỉ hiển thị lý do từ chối nếu trạng thái là 'Đã từ chối' 
-                        ?>
-                            <p><strong>Lý do từ chối:</strong> <?php echo $rejectionReason; ?></p>
-                        <?php } ?>
+                        <p><strong>Trạng Thái:</strong> <?php echo htmlspecialchars($row['STATUS'] == 1 ? 'Đã xác nhận' : ($row['STATUS'] == 0 ? 'Đã từ chối' : 'Chưa xác nhận')); ?></p>
+                        <p><strong>Ngày Xuất Phát:</strong> <?php echo htmlspecialchars($row['STARTDATE']); ?></p>
+                        <?php if ($row['STATUS'] == 0) : ?>
+                            <p><strong>Lý do từ chối:</strong> <?php echo htmlspecialchars($row['REJECTION_REASON'] ? $row['REJECTION_REASON'] : 'N/A'); ?></p>
+                        <?php endif; ?>
                     </div>
                     <div class="col-md-6">
                         <p><strong>Tên Người Đặt:</strong> <?php echo htmlspecialchars($row['USNAME']); ?></p>

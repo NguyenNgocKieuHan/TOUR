@@ -1,18 +1,21 @@
 <?php
 session_start();
 
-include('includes/header.php');
-include('includes/db.php');
-
-// Kiểm tra xem người dùng đã đăng nhập hay chưa
-if (!isset($_SESSION['USERID'])) {
-    header("Location: login.php?message=Vui lòng đăng nhập để xem trang này.");
+// Kiểm tra xem người dùng đã đăng nhập chưa
+if (!isset($_SESSION['userid'])) {
+    echo "<script>alert('Bạn chưa đăng nhập!'); window.location.href='login.php';</script>";
     exit();
 }
 
+// Kết nối đến cơ sở dữ liệu
+include('includes/header.php');
+include('includes/db.php');
+
+// Lấy ID người dùng từ phiên
+$userid = $_SESSION['userid'];
+
 // Lấy thông tin người dùng từ cơ sở dữ liệu
-$userid = $_SESSION['USERID'];
-$stmt = $conn->prepare("SELECT USNAME, USEMAIL, USSDT FROM users WHERE USERID = ?");
+$stmt = $conn->prepare("SELECT USNAME, USEMAIL, USSDT FROM users WHERE userid = ?");
 $stmt->bind_param("i", $userid);
 $stmt->execute();
 $stmt->bind_result($name, $email, $sdt);
@@ -42,7 +45,7 @@ $conn->close();
                     <li class="list-group-item"><strong>Email: </strong><?php echo htmlspecialchars($email); ?></li>
                     <li class="list-group-item"><strong>Số điện thoại: </strong><?php echo htmlspecialchars($sdt); ?></li>
                 </ul>
-                <!-- <a href="logout.php" class="btn btn-danger mt-4">Đăng xuất</a> -->
+                <a href="logout.php" class="btn btn-danger mt-4">Đăng xuất</a>
             </div>
         </div>
     </div>

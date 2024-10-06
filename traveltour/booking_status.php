@@ -2,7 +2,7 @@
 session_start();
 
 // Check if user is logged in
-if (!isset($_SESSION['USERID'])) {
+if (!isset($_SESSION['userid'])) {
     echo "<script>alert('Bạn chưa đăng nhập!'); window.location.href='login.php';</script>";
     exit();
 }

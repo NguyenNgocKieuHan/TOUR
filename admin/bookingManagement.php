@@ -9,11 +9,12 @@ if (!isset($_SESSION['ADID'])) {
     exit();
 }
 
-// Truy vấn thông tin tất cả bookings
-$sql = "SELECT b.BOOKINGDATE, b.NUMOFPEOPLE, b.TOTALPRICE, b.STATUS, t.TOURNAME, t.TOURID, b.USERID, u.USNAME AS USERNAME, u.USEMAIL
+// Truy vấn thông tin tất cả bookings và sắp xếp theo BOOKINGDATE từ mới đến cũ
+$sql = "SELECT b.BOOKINGDATE, b.NUMOFPEOPLE,b.STARTDATE, b.TOTALPRICE, b.STATUS, t.TOURNAME, t.TOURID, b.USERID, u.USNAME AS USERNAME, u.USEMAIL
         FROM bookings b
         JOIN tour t ON b.TOURID = t.TOURID
-        JOIN users u ON b.USERID = u.USERID";
+        JOIN users u ON b.USERID = u.USERID
+        ORDER BY b.BOOKINGDATE DESC"; // Sắp xếp theo BOOKINGDATE từ mới đến cũ
 
 $stmt = $conn->prepare($sql);
 $stmt->execute();
@@ -50,8 +51,8 @@ $result = $stmt->get_result(); // Lấy kết quả
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 $statusActions = ($row['STATUS'] == 2) ?
-                                    "<a href='approveBooking.php?TOURID=" . $row['TOURID'] . "&userid=" . $row['USERID'] . "' class='btn btn-success btn-sm'>Duyệt</a>
-                                    <a href='rejectBooking.php?TOURID=" . $row['TOURID'] . "&userid=" . $row['USERID'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"Bạn có chắc chắn muốn từ chối không?\");'>Từ chối</a>"
+                                    "<a href='approveBooking.php?TOURID=" . $row['TOURID'] . "&userid=" . $row['USERID'] . "&startdate=" . $row['STARTDATE'] . "' class='btn btn-success btn-sm'>Duyệt</a>
+                                <a href='rejectBooking.php?TOURID=" . $row['TOURID'] . "&userid=" . $row['USERID'] . "&startdate=" . $row['STARTDATE'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"Bạn có chắc chắn muốn từ chối không?\");'>Từ chối</a>"
                                     : "";
 
                                 $statusText = '';
@@ -76,9 +77,12 @@ $result = $stmt->get_result(); // Lấy kết quả
                                 echo "<td><span class='price'>" . number_format($row['TOTALPRICE'], 0, ',', '.') . " VNĐ</span></td>";
                                 echo "<td>" . htmlspecialchars($statusText) . "</td>";
                                 echo "<td>
-                                        <a href='viewBooking.php?userid=" . $row['USERID'] . "&tourid=" . $row['TOURID'] . "' class='btn btn-info btn-sm'><i class='fa fa-eye'></i> Xem</a>
-                                        $statusActions
-                                      </td>";
+                                    <a href='viewBooking.php?userid=" . $row['USERID'] . "&tourid=" . $row['TOURID'] . "&startdate=" . $row['STARTDATE'] . "' class='btn btn-info btn-sm'>
+                                        <i class='fa fa-eye'></i> Xem
+                                    </a>
+                                    $statusActions
+                                    </td>";
+
                                 echo "</tr>";
                             }
                         } else {

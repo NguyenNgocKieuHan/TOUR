@@ -114,7 +114,7 @@
                     </div>
                 </div>
                 <div class="github-link">
-                    <a href="https://github.com/dropways/deskapp" target="_blank"><img src="vendors/images/github.svg" alt=""></a>
+                    <a href="https://github.com/NguyenNgocKieuHan" target="_blank"><img src="vendors/images/github.svg" alt=""></a>
                 </div>
             </div>
         </div>
@@ -197,8 +197,8 @@
         <div class="left-side-bar">
             <div class="brand-logo">
                 <a href="index.php">
-                    <img src="vendors/images/deskapp-logo.svg" alt="" class="dark-logo">
-                    <img src="vendors/images/deskapp-logo-white.svg" alt="" class="light-logo">
+                    <!-- <img src="vendors/images/deskapp-logo.svg" alt="" class="dark-logo"> -->
+                    <!-- <img src="vendors/images/deskapp-logo-white.svg" alt="" class="light-logo"> -->
                 </a>
                 <div class="close-sidebar" data-toggle="left-sidebar-close">
                     <i class="ion-close-round"></i>
@@ -238,11 +238,11 @@
                                     <span class="micon fa fa-star"></span><span class="mtext"> Quản lý Đánh giá</span>
                                 </a>
                             </li>
-                            <!-- <li>
-                                <a href="blog.php" class="dropdown-toggle no-arrow">
-                                    <span class="micon fa fa-file-o"></span><span class="mtext"> Quản lý Nội dung</span>
+                            <li>
+                                <a href="doanhthu.php" class="dropdown-toggle no-arrow">
+                                    <span class="micon fa fa-file-o"></span><span class="mtext"> Quản lý Doanh thu</span>
                                 </a>
-                            </li> -->
+                            </li>
                             <!-- <li>
                                 <a href="chat.php" class="dropdown-toggle no-arrow">
                                     <span class="micon dw dw-chat3"></span><span class="mtext">Chat</span>

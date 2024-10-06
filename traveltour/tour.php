@@ -5,12 +5,13 @@ $activate = "tour";
 include('includes/header.php');
 include('includes/db.php');
 
+// Truy vấn tour và loại tour
 $sql = "SELECT tour.*, tourtype.TOURTYPENAME 
         FROM tour 
         INNER JOIN tourtype ON tour.TOURTYPEID = tourtype.TOURTYPEID";
 $result = $conn->query($sql);
 
-// Function to truncate description
+// Hàm rút gọn mô tả
 function truncateDescription($description, $length = 100)
 {
     if (strlen($description) > $length) {
@@ -18,6 +19,19 @@ function truncateDescription($description, $length = 100)
     }
     return $description;
 }
+
+// Hàm tính số sao trung bình từ bảng reviews
+function getAverageRating($conn, $tourId)
+{
+    $sql = "SELECT AVG(RATING) AS averageRating FROM reviews WHERE TOURID = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $tourId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+    return round($row['averageRating'], 1); // Làm tròn đến 1 chữ số thập phân
+}
+
 ?>
 
 <!-- Header Start -->
@@ -41,7 +55,7 @@ function truncateDescription($description, $length = 100)
         <div class="packages-carousel owl-carousel">
             <?php
             if ($result->num_rows > 0) {
-                // Fetch data for each tour
+                // Fetch dữ liệu từng tour
                 while ($row = $result->fetch_assoc()) {
                     $tourId = $row['TOURID'];
                     $tourName = $row['TOURNAME'];
@@ -50,7 +64,10 @@ function truncateDescription($description, $length = 100)
                     $price = $row['PRICE'];
                     $shortDescription = truncateDescription($row['DESCRIPTION']);
 
-                    // Convert image data (BLOB) to base64
+                    // Lấy đánh giá trung bình
+                    $averageRating = getAverageRating($conn, $tourId);
+
+                    // Convert hình ảnh (BLOB) thành base64
                     $imageData = base64_encode($row['IMAGE']);
                     $imageSrc = 'data:image/jpeg;base64,' . $imageData;
 
@@ -72,11 +89,22 @@ function truncateDescription($description, $length = 100)
                             <div class="p-4 pb-0">
                                 <h5 class="mb-0"><?php echo $tourName; ?></h5>
                                 <div class="mb-3">
-                                    <small class="fa fa-star text-primary"></small>
-                                    <small class="fa fa-star text-primary"></small>
-                                    <small class="fa fa-star text-primary"></small>
-                                    <small class="fa fa-star text-primary"></small>
-                                    <small class="fa fa-star text-primary"></small>
+                                    <?php
+                                    // Hiển thị số sao dựa trên đánh giá trung bình
+                                    $fullStars = floor($averageRating); // Số sao đầy đủ
+                                    $halfStar = ($averageRating - $fullStars) >= 0.5 ? true : false; // Nửa sao
+
+                                    for ($i = 0; $i < 5; $i++) {
+                                        if ($i < $fullStars) {
+                                            echo '<small class="fa fa-star text-primary"></small>';
+                                        } elseif ($halfStar && $i == $fullStars) {
+                                            echo '<small class="fa fa-star-half-alt text-primary"></small>';
+                                            $halfStar = false;
+                                        } else {
+                                            echo '<small class="fa fa-star-o text-primary"></small>';
+                                        }
+                                    }
+                                    ?>
                                 </div>
                                 <p class="mb-4"><?php echo $shortDescription; ?></p>
                             </div>
@@ -85,13 +113,12 @@ function truncateDescription($description, $length = 100)
                                     <a href="tour_detail.php?tourid=<?php echo $tourId; ?>" class="my-autobtn-hover btn text-white py-2 px-4">Xem thêm</a>
                                 </div>
                                 <div class="col-6 text-end px-0">
-                                    <?php if (isset($_SESSION['USERID'])): ?>
+                                    <?php if (isset($_SESSION['userid'])): ?>
                                         <a href="booking.php?tourid=<?php echo $tourId; ?>&tourname=<?php echo urlencode($tourName); ?>&price=<?php echo $price; ?>" class="btn-hover btn text-white py-2 px-4">Đặt ngay</a>
                                     <?php else: ?>
-                                        <a href="login.php?redirect=booking.php?tourid=<?php echo $tourId; ?>&tourname=<?php echo urlencode($tourName); ?>&price=<?php echo $price; ?>" class="btn-hover btn text-white py-2 px-4">Đặt ngay</a>
+                                        <a href="login.php?redirect=<?php echo urlencode('booking.php?tourid=' . $tourId . '&tourname=' . urlencode($tourName) . '&price=' . $price); ?>" class="btn-hover btn text-white py-2 px-4">Đặt ngay</a>
                                     <?php endif; ?>
                                 </div>
-
                             </div>
                         </div>
                     </div>
@@ -116,7 +143,6 @@ include('includes/footer.php');
 <script src="lib/waypoints/waypoints.min.js"></script>
 <script src="lib/owlcarousel/owl.carousel.min.js"></script>
 <script src="lib/lightbox/js/lightbox.min.js"></script>
-
 
 <!-- Template Javascript -->
 <script src="js/main.js"></script>

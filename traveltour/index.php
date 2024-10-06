@@ -22,7 +22,6 @@ include('includes/db.php');
                     <div class="p-3" style="max-width: 900px;">
                         <h4 class="text-white text-uppercase fw-bold mb-4" style="letter-spacing: 3px;">Khám phá Cần Thơ</h4>
                         <h1 class="display-2 text-capitalize text-white mb-4">Hãy cùng nhau khám phá Cần Thơ!</h1>
-                        <!-- <p class="mb-5 fs-5">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, -->
                         </p>
                         <div class="d-flex align-items-center justify-content-center">
                             <a class="btn-hover-bg btn btn-primary rounded-pill text-white py-3 px-5" href="#">Khám phá ngay </a>
@@ -36,7 +35,6 @@ include('includes/db.php');
                     <div class="p-3" style="max-width: 900px;">
                         <h4 class="text-white text-uppercase fw-bold mb-4" style="letter-spacing: 3px;">Khám phá Cần Thơ</h4>
                         <h1 class="display-2 text-capitalize text-white mb-4">Tìm tour hoàn hảo của bạn tại TravelTour</h1>
-                        <!-- <p class="mb-5 fs-5">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, -->
                         </p>
                         <div class="d-flex align-items-center justify-content-center">
                             <a class="btn-hover-bg btn btn-primary rounded-pill text-white py-3 px-5" href="#">Khám phá ngay </a>
@@ -50,7 +48,6 @@ include('includes/db.php');
                     <div class="p-3" style="max-width: 900px;">
                         <h4 class="text-white text-uppercase fw-bold mb-4" style="letter-spacing: 3px;">Khám phá Cần Thơ</h4>
                         <h1 class="display-2 text-capitalize text-white mb-4">Bạn thích đi không?</h1>
-                        <!-- <p class="mb-5 fs-5">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, -->
                         </p>
                         <div class="d-flex align-items-center justify-content-center">
                             <a class="btn-hover-bg btn btn-primary rounded-pill text-white py-3 px-5" href="#">Khám phá ngay </a>
@@ -70,15 +67,17 @@ include('includes/db.php');
     </div>
 </div>
 <!-- Carousel End -->
-</div>
 <div class="container-fluid search-bar position-relative" style="top: -50%; transform: translateY(-50%);">
     <div class="container">
         <div class="position-relative rounded-pill w-100 mx-auto p-5" style="background: rgba(19, 53, 123, 0.8);">
-            <input class="form-control border-0 rounded-pill w-100 py-3 ps-4 pe-5" type="text" placeholder="Eg: Cồn Sơn">
-            <button type="button" class="btn btn-primary rounded-pill py-2 px-4 position-absolute me-2" style="top: 50%; right: 46px; transform: translateY(-50%);">Tìm kiếm</button>
+            <form action="search.php" method="GET">
+                <input class="form-control border-0 rounded-pill w-100 py-3 ps-4 pe-5" type="text" name="query" placeholder="Eg: Cồn Sơn" required> <!-- Thêm thuộc tính name -->
+                <button type="submit" class="btn btn-primary rounded-pill py-2 px-4 position-absolute me-2" style="top: 50%; right: 46px; transform: translateY(-50%);">Tìm kiếm</button>
+            </form>
         </div>
     </div>
 </div>
+
 <!-- Navbar & Hero End -->
 
 <!-- About Start -->
@@ -99,21 +98,12 @@ include('includes/db.php');
                     <div class="col-sm-12">
                         <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>Khách hàng là trung tâm</p>
                     </div>
-                    <!-- <div class="col-sm-6">
-                        <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>Chất lượng dịch vụ</p>
-                    </div> -->
                     <div class="col-sm-12">
                         <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>Chất lượng dịch vụ</p>
                     </div>
-                    <!-- <div class="col-sm-6">
-                        <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>Latest Model Vehicles</p>
-                    </div> -->
                     <div class="col-sm-12">
                         <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>Đổi mới và sáng tạo</p>
                     </div>
-                    <!-- <div class="col-sm-6">
-                        <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>24/7 Service</p>
-                    </div> -->
                 </div>
                 <a class="btn btn-primary rounded-pill py-3 px-5 mt-2" href="about.php">Xem thêm</a>
             </div>
@@ -1027,32 +1017,43 @@ if ($result->num_rows > 0) {
 
 $conn->close();
 ?>
+<!-- Header Start -->
+<div class="container-fluid bg-breadcrumb">
+    <div class="container text-center py-5" style="max-width: 900px;">
+        <h3 class="text-white display-3 mb-4">Đặt tour trực tuyến</h1>
+            <ol class="breadcrumb justify-content-center mb-0">
+                <li class="breadcrumb-item"><a href="index.php">Trang chủ</a></li>
+                <li class="breadcrumb-item"><a href="#">Trang</a></li>
+                <li class="breadcrumb-item active text-white">Đặt tour trực tuyến</li>
+            </ol>
+    </div>
+</div>
+<!-- Header End -->
+
+<!-- Tour Booking Start -->
 <div class="container-fluid booking py-5">
     <div class="container py-5">
         <div class="row g-5 align-items-center">
             <div class="col-lg-6">
                 <h5 class="section-booking-title pe-3">Đặt Tour</h5>
                 <h1 class="text-white mb-4">Đặt tour trực tuyến</h1>
-                <p class="text-white mb-4">Đặt tour trực tuyến dễ dàng và nhanh chóng. Hãy chọn tour mà bạn muốn tham gia và cung cấp thông tin cần thiết để hoàn tất đặt chỗ.
-                </p>
-                <p class="text-white mb-4">Hãy chọn tour mà bạn muốn tham gia từ danh sách các tour hiện có. Chúng tôi cung cấp nhiều lựa chọn tour phong phú với điểm đến đa dạng. Mỗi tour đều có chương trình đặc biệt dành riêng cho du khách, bao gồm lịch trình chi tiết, dịch vụ chất lượng và giá cả hợp lý.
-                </p>
-                <!-- <a href="#" class="btn btn-light text-primary rounded-pill py-3 px-5 mt-2">Read More</a> -->
+                <p class="text-white mb-4">Đặt tour trực tuyến dễ dàng và nhanh chóng. Hãy chọn tour mà bạn muốn tham gia và cung cấp thông tin cần thiết để hoàn tất đặt chỗ.</p>
+                <p class="text-white mb-4">Hãy chọn tour từ danh sách các tour hiện có. Mỗi tour có chương trình đặc biệt dành riêng cho du khách, bao gồm lịch trình chi tiết, dịch vụ chất lượng và giá cả hợp lý.</p>
             </div>
+
             <div class="col-lg-6">
                 <h1 class="text-white mb-3">Đặt tour du lịch</h1>
-                <!-- <p class="text-white mb-4">Get <span class="text-warning">50% Off</span> On Your First Adventure Trip With Travela. Get More Deal Offers Here.</p> -->
-                <form action="process_booking.php" method="POST">
+                <form action="process_bookingg.php" method="POST">
                     <div class="row g-3">
                         <div class="col-md-6">
                             <div class="form-floating">
-                                <input type="text" class="form-control bg-white border-0" id="name" name="name" placeholder="Họ và tên" readonly>
+                                <input type="text" class="form-control bg-white border-0" id="name" name="name" placeholder="Họ và tên" required>
                                 <label for="name">Họ và tên</label>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-floating">
-                                <input type="email" class="form-control bg-white border-0" id="email" name="email" placeholder="Email" readonly>
+                                <input type="email" class="form-control bg-white border-0" id="email" name="email" placeholder="Email" required>
                                 <label for="email">Email</label>
                             </div>
                         </div>
@@ -1067,7 +1068,7 @@ $conn->close();
                                 <select id="tourDropdown" class="form-select bg-white border-0" name="tourid">
                                     <option value="">Chọn tour</option>
                                     <?php foreach ($tours as $tour) { ?>
-                                        <option value="<?php echo $tour['TOURID']; ?>" data-price="<?php echo $tour['PRICE']; ?>">
+                                        <option value="<?php echo $tour['TOURID']; ?>" data-price="<?php echo number_format($tour['PRICE'], 0, ',', '.') . " " . "VNĐ"; ?>">
                                             <?php echo htmlspecialchars($tour['TOURNAME']); ?>
                                         </option>
                                     <?php } ?>
@@ -1092,34 +1093,40 @@ $conn->close();
                         </div>
                     </div>
                 </form>
-                <script>
-                    // Cập nhật giá khi chọn tour
-                    document.getElementById('tourDropdown').addEventListener('change', function() {
-                        var selectedOption = this.options[this.selectedIndex];
-                        var price = selectedOption.getAttribute('data-price');
-                        document.getElementById('price').value = price ? price : '';
-                    });
-                </script>
-
-                <script>
-                    $('#datetime').datetimepicker({
-                        format: 'YYYY-MM-DD HH:mm:ss',
-                        icons: {
-                            time: 'far fa-clock',
-                            date: 'far fa-calendar-alt',
-                            up: 'fas fa-chevron-up',
-                            down: 'fas fa-chevron-down',
-                            previous: 'fas fa-chevron-left',
-                            next: 'fas fa-chevron-right',
-                            today: 'far fa-calendar-check',
-                            clear: 'far fa-trash-alt',
-                            close: 'far fa-times-circle'
-                        }
-                    });
-                </script>
             </div>
         </div>
     </div>
+</div>
+<!-- Tour Booking End -->
+
+<script>
+    // Cập nhật giá khi chọn tour
+    document.getElementById('tourDropdown').addEventListener('change', function() {
+        var selectedOption = this.options[this.selectedIndex];
+        var price = selectedOption.getAttribute('data-price');
+        document.getElementById('price').value = price ? price : '';
+    });
+</script>
+
+<script>
+    $('#datetime').datetimepicker({
+        format: 'YYYY-MM-DD HH:mm:ss',
+        icons: {
+            time: 'far fa-clock',
+            date: 'far fa-calendar-alt',
+            up: 'fas fa-chevron-up',
+            down: 'fas fa-chevron-down',
+            previous: 'fas fa-chevron-left',
+            next: 'fas fa-chevron-right',
+            today: 'far fa-calendar-check',
+            clear: 'far fa-trash-alt',
+            close: 'far fa-times-circle'
+        }
+    });
+</script>
+</div>
+</div>
+</div>
 </div>
 <!-- Tour Booking End -->
 
@@ -1415,92 +1422,7 @@ $conn->close();
 <!-- Subscribe End -->
 
 <!-- Footer Start -->
-<div class="container-fluid footer py-5">
-    <div class="container py-5">
-        <div class="row g-5">
-            <div class="col-md-6 col-lg-6 col-xl-3">
-                <div class="footer-item d-flex flex-column">
-                    <h4 class="mb-4 text-white">Liên hệ</h4>
-                    <a href=""><i class="fas fa-home me-2"></i>Đường 123, Cần Thơ,Việt Nam</a>
-                    <a href=""><i class="fas fa-envelope me-2"></i> info@example.com</a>
-                    <a href=""><i class="fas fa-phone me-2"></i> +012 345 67890</a>
-                    <a href="" class="mb-3"><i class="fas fa-print me-2"></i> +012 345 67890</a>
-                    <div class="d-flex align-items-center">
-                        <i class="fas fa-share fa-2x text-white me-2"></i>
-                        <a class="btn-square btn btn-primary rounded-circle mx-1" href=""><i class="fab fa-facebook-f"></i></a>
-                        <a class="btn-square btn btn-primary rounded-circle mx-1" href=""><i class="fab fa-twitter"></i></a>
-                        <a class="btn-square btn btn-primary rounded-circle mx-1" href=""><i class="fab fa-instagram"></i></a>
-                        <a class="btn-square btn btn-primary rounded-circle mx-1" href=""><i class="fab fa-linkedin-in"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-6 col-xl-3">
-                <div class="footer-item d-flex flex-column">
-                    <h4 class="mb-4 text-white">Công ty
-                    </h4>
-                    <a href=""><i class="fas fa-angle-right me-2"></i> Về chúng tôi</a>
-                    <a href=""><i class="fas fa-angle-right me-2"></i> Nghề nghiệp </a>
-                    <a href=""><i class="fas fa-angle-right me-2"></i> Bài viết</a>
-                    <a href=""><i class="fas fa-angle-right me-2"></i> Nhấn</a>
-                    <a href=""><i class="fas fa-angle-right me-2"></i> Thẻ quà tặng</a>
-                    <a href=""><i class="fas fa-angle-right me-2"></i> Tạp chí</a>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-6 col-xl-3">
-                <div class="footer-item d-flex flex-column">
-                    <h4 class="mb-4 text-white">Ủng hộ</h4>
-                    <a href=""><i class="fas fa-angle-right me-2"></i> Liên hệ</a>
-                    <a href=""><i class="fas fa-angle-right me-2"></i> Thông báo pháp lý</a>
-                    <a href=""><i class="fas fa-angle-right me-2"></i> Chính sách bảo mật</a>
-                    <a href=""><i class="fas fa-angle-right me-2"></i> Điều khoản và điều kiện</a>
-                    <a href=""><i class="fas fa-angle-right me-2"></i> Sơ đồ trang web</a>
-                    <a href=""><i class="fas fa-angle-right me-2"></i> Chính sách Cookie </a>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-6 col-xl-3">
-                <div class="footer-item">
-                    <div class="row gy-3 gx-2 mb-4">
-                        <div class="col-xl-6">
-                            <form>
-                                <div class="form-floating">
-                                    <select class="form-select bg-dark border" id="select1">
-                                        <option value="1">Việt Nam</option>
-                                        <option value="2">English</option>
-                                        <!-- <option value="3">Greek</option>
-                                        <option value="3">New York</option> -->
-                                    </select>
-                                    <label for="select1">Ngôn ngữ</label>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="col-xl-6">
-                            <form>
-                                <div class="form-floating">
-                                    <select class="form-select bg-dark border" id="select1">
-                                        <option value="1">VNĐ</option>
-                                        <option value="2">USD</option>
-                                        <!-- <option value="3">INR</option>
-                                        <option value="3">GBP</option> -->
-                                    </select>
-                                    <label for="select1">Đơn vị tiền</label>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    <h4 class="text-white mb-3">Payments</h4>
-                    <div class="footer-bank-card">
-                        <a href="#" class="text-white me-2"><i class="fab fa-cc-amex fa-2x"></i></a>
-                        <a href="#" class="text-white me-2"><i class="fab fa-cc-visa fa-2x"></i></a>
-                        <a href="#" class="text-white me-2"><i class="fas fa-credit-card fa-2x"></i></a>
-                        <a href="#" class="text-white me-2"><i class="fab fa-cc-mastercard fa-2x"></i></a>
-                        <a href="#" class="text-white me-2"><i class="fab fa-cc-paypal fa-2x"></i></a>
-                        <a href="#" class="text-white"><i class="fab fa-cc-discover fa-2x"></i></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<?php include('includes/footer.php'); ?>
 <!-- Footer End -->
 
 <!-- Back to Top -->

@@ -115,20 +115,31 @@ if (!isset($_SESSION['ADID'])) {
 				</div>
 			</div>
 			<div class="col-xl-3 mb-30">
+				<?php
+
+				// Truy vấn để lấy tổng số lượt đặt tour
+				$totalBookingsQuery = "SELECT COUNT(*) AS total_bookings FROM bookings";
+				$stmtTotalBookings = $conn->prepare($totalBookingsQuery);
+				$stmtTotalBookings->execute();
+				$totalBookingsResult = $stmtTotalBookings->get_result();
+				$totalBookings = $totalBookingsResult->fetch_assoc()['total_bookings'];
+				?>
+
 				<div class="card-box height-100-p widget-style1">
 					<div class="d-flex flex-wrap align-items-center">
 						<div class="progress-data">
 							<div id="chart4"></div>
 						</div>
 						<div class="widget-data">
-							<div class="h4 mb-0">$6060</div>
-							<div class="weight-600 font-14">Worth</div>
+							<div class="h4 mb-0"><?php echo number_format($totalBookings, 0, ',', '.'); ?></div>
+							<div class="weight-600 font-14">Tổng số lượt đặt tour</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-		<div class="row">
+
+		<!-- <div class="row">
 			<div class="col-xl-8 mb-30">
 				<div class="card-box height-100-p pd-20">
 					<h2 class="h4 mb-20">Hoạt động</h2>
@@ -141,156 +152,64 @@ if (!isset($_SESSION['ADID'])) {
 					<div id="chart6"></div>
 				</div>
 			</div>
-		</div>
-		<div class="card-box mb-30">
-			<h2 class="h4 pd-20">Tours bán chạy nhất</h2>
-			<table class="data-table table nowrap">
-				<thead>
-					<tr>
-						<th class="table-plus datatable-nosort">Tour</th>
-						<th>Tên tour</th>
-						<th>Giá</th>
-						<!-- <th>Mô tả</th> -->
-						<th>Ngày bắt đầu</th>
-						<th>Số lượng</th>
-						<th class="datatable-nosort">Hoạt động</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td class="table-plus">
-							<img src="vendors/images/product-1.jpg" width="70" height="70" alt="">
-						</td>
-						<td>
-							<h5 class="font-16">Shirt</h5>
-							by John Doe
-						</td>
-						<td>Black</td>
-						<td>M</td>
-						<td>$1000</td>
-						<td>1</td>
-						<td>
-							<div class="dropdown">
-								<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-									<i class="dw dw-more"></i>
-								</a>
-								<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-									<a class="dropdown-item" href="#"><i class="dw dw-eye"></i> Xem chi tiết</a>
-									<a class="dropdown-item" href="#"><i class="dw dw-edit2"></i> Sửa</a>
-									<a class="dropdown-item" href="#"><i class="dw dw-delete-3"></i> Xóa</a>
-								</div>
-							</div>
-						</td>
-					</tr>
-					<tr>
-						<td class="table-plus">
-							<img src="vendors/images/product-2.jpg" width="70" height="70" alt="">
-						</td>
-						<td>
-							<h5 class="font-16">Boots</h5>
-							by Lea R. Frith
-						</td>
-						<td>brown</td>
-						<td>9UK</td>
-						<td>$900</td>
-						<td>1</td>
-						<td>
-							<div class="dropdown">
-								<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-									<i class="dw dw-more"></i>
-								</a>
-								<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-									<a class="dropdown-item" href="#"><i class="dw dw-eye"></i> View</a>
-									<a class="dropdown-item" href="#"><i class="dw dw-edit2"></i> Edit</a>
-									<a class="dropdown-item" href="#"><i class="dw dw-delete-3"></i> Delete</a>
-								</div>
-							</div>
-						</td>
-					</tr>
-					<tr>
-						<td class="table-plus">
-							<img src="vendors/images/product-3.jpg" width="70" height="70" alt="">
-						</td>
-						<td>
-							<h5 class="font-16">Hat</h5>
-							by Erik L. Richards
-						</td>
-						<td>Orange</td>
-						<td>M</td>
-						<td>$100</td>
-						<td>4</td>
-						<td>
-							<div class="dropdown">
-								<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-									<i class="dw dw-more"></i>
-								</a>
-								<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-									<a class="dropdown-item" href="#"><i class="dw dw-eye"></i> View</a>
-									<a class="dropdown-item" href="#"><i class="dw dw-edit2"></i> Edit</a>
-									<a class="dropdown-item" href="#"><i class="dw dw-delete-3"></i> Delete</a>
-								</div>
-							</div>
-						</td>
-					</tr>
-					<tr>
-						<td class="table-plus">
-							<img src="vendors/images/product-4.jpg" width="70" height="70" alt="">
-						</td>
-						<td>
-							<h5 class="font-16">Long Dress</h5>
-							by Renee I. Hansen
-						</td>
-						<td>Gray</td>
-						<td>L</td>
-						<td>$1000</td>
-						<td>1</td>
-						<td>
-							<div class="dropdown">
-								<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-									<i class="dw dw-more"></i>
-								</a>
-								<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-									<a class="dropdown-item" href="#"><i class="dw dw-eye"></i> View</a>
-									<a class="dropdown-item" href="#"><i class="dw dw-edit2"></i> Edit</a>
-									<a class="dropdown-item" href="#"><i class="dw dw-delete-3"></i> Delete</a>
-								</div>
-							</div>
-						</td>
-					</tr>
-					<tr>
-						<td class="table-plus">
-							<img src="vendors/images/product-5.jpg" width="70" height="70" alt="">
-						</td>
-						<td>
-							<h5 class="font-16">Blazer</h5>
-							by Vicki M. Coleman
-						</td>
-						<td>Blue</td>
-						<td>M</td>
-						<td>$1000</td>
-						<td>1</td>
-						<td>
-							<div class="dropdown">
-								<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-									<i class="dw dw-more"></i>
-								</a>
-								<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-									<a class="dropdown-item" href="#"><i class="dw dw-eye"></i> View</a>
-									<a class="dropdown-item" href="#"><i class="dw dw-edit2"></i> Edit</a>
-									<a class="dropdown-item" href="#"><i class="dw dw-delete-3"></i> Delete</a>
-								</div>
-							</div>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
+		</div> -->
+	</div>
+	<div class="card-box mb-30">
+		<h2 class="h4 pd-20">Tours bán chạy nhất</h2>
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th scope="col">Quản trị viên đã thêm tour</th>
+					<th scope="col">Tên Tour</th>
+					<th scope="col">Loại Tour</th>
+					<th scope="col">Giá</th>
+					<th scope="col">Thời Gian</th>
+					<th scope="col">Ảnh</th>
+					<th scope="col">Hành động</th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php
+				// Truy vấn thông tin tour và loại tour với số lượng đặt từ 2 trở lên
+				$query = "SELECT t.TOURID, t.TOURNAME, tt.TOURTYPENAME, t.PRICE, t.TIMETOUR, t.IMAGE, a.ADNAME, COUNT(b.USERID) AS booking_count
+                                  FROM TOUR t
+                                  JOIN TOURTYPE tt ON t.TOURTYPEID = tt.TOURTYPEID
+                                  JOIN ADMIN a ON t.ADID = a.ADID
+                                  LEFT JOIN bookings b ON t.TOURID = b.TOURID
+                                  GROUP BY t.TOURID
+                                  HAVING booking_count >= 2";
+
+				$result = mysqli_query($conn, $query);
+
+				// Kiểm tra có bản ghi nào không
+				if (mysqli_num_rows($result) > 0) {
+					// Lặp qua các bản ghi và hiển thị
+					while ($row = mysqli_fetch_assoc($result)) {
+						echo "<tr>";
+						echo "<th>" . htmlspecialchars($row['ADNAME']) .  "</th>";
+						echo "<td>" . htmlspecialchars($row['TOURNAME']) .  "</td>";
+						echo "<td>" . htmlspecialchars($row['TOURTYPENAME']) . "</td>";
+						echo "<td>" . htmlspecialchars($row['PRICE']) . "</td>";
+						echo "<td>" . htmlspecialchars($row['TIMETOUR']) . " " . "Ngày" . "</td>";
+
+						// Hiển thị ảnh tour
+						echo "<td><img src='data:image/jpeg;base64," . base64_encode($row['IMAGE']) . "' alt='Ảnh' style='width: 100px;'></td>";
+
+						echo "<td>
+                                        <a href='editTour.php?id=" . $row['TOURID'] . "' class='btn btn-info btn-sm'><i class='fa fa-edit'></i> Sửa</a>
+                                        <a href='deleteTour.php?id=" . $row['TOURID'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"Bạn có chắc chắn muốn xóa không?\");'><i class='fa fa-trash'></i> Xóa</a>
+                                      </td>";
+						echo "</tr>";
+					}
+				} else {
+					echo "<tr><td colspan='7' class='text-center'>Không có tour nào để hiển thị.</td></tr>";
+				}
+				?>
+			</tbody>
+		</table>
 	</div>
 </div>
 
-<!-- Footer -->
-<?php
-?>
 <!-- js -->
 <script src="vendors/scripts/core.js"></script>
 <script src="vendors/scripts/script.min.js"></script>

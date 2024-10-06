@@ -6,11 +6,11 @@ include('includes/header.php');
 include('includes/db.php');
 
 // Kiểm tra xem người dùng đã đăng nhập chưa
-if (isset($_SESSION['USERID'])) {
-    $userid = $_SESSION['USERID'];
+if (isset($_SESSION['userid'])) {
+    $userid = $_SESSION['userid'];
 
     // Use prepared statement to prevent SQL injection
-    $stmt = $conn->prepare("SELECT USNAME, USEMAIL FROM users WHERE USERID = ?");
+    $stmt = $conn->prepare("SELECT USNAME, USEMAIL FROM users WHERE userid = ?");
     $stmt->bind_param("i", $userid);
     $stmt->execute();
     $result = $stmt->get_result();
