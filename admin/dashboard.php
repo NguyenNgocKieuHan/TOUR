@@ -132,7 +132,7 @@ if (!isset($_SESSION['ADID'])) {
 						</div>
 						<div class="widget-data">
 							<div class="h4 mb-0"><?php echo number_format($totalBookings, 0, ',', '.'); ?></div>
-							<div class="weight-600 font-14">Tổng số lượt đặt tour</div>
+							<div class="weight-600 font-14">Lượt đặt tour</div>
 						</div>
 					</div>
 				</div>
@@ -154,73 +154,70 @@ if (!isset($_SESSION['ADID'])) {
 			</div>
 		</div> -->
 	</div>
-	<div class="card-box mb-30">
-		<h2 class="h4 pd-20">Tours bán chạy nhất</h2>
-		<table class="table table-striped">
-			<thead>
-				<tr>
-					<th scope="col">Quản trị viên đã thêm tour</th>
-					<th scope="col">Tên Tour</th>
-					<th scope="col">Loại Tour</th>
-					<th scope="col">Giá</th>
-					<th scope="col">Thời Gian</th>
-					<th scope="col">Ảnh</th>
-					<th scope="col">Hành động</th>
-				</tr>
-			</thead>
-			<tbody>
-				<?php
-				// Truy vấn thông tin tour và loại tour với số lượng đặt từ 2 trở lên
-				$query = "SELECT t.TOURID, t.TOURNAME, tt.TOURTYPENAME, t.PRICE, t.TIMETOUR, t.IMAGE, a.ADNAME, COUNT(b.USERID) AS booking_count
-                                  FROM TOUR t
-                                  JOIN TOURTYPE tt ON t.TOURTYPEID = tt.TOURTYPEID
-                                  JOIN ADMIN a ON t.ADID = a.ADID
-                                  LEFT JOIN bookings b ON t.TOURID = b.TOURID
-                                  GROUP BY t.TOURID
-                                  HAVING booking_count >= 2";
+	<div class="pd-ltr-20 xs-pd-20-10">
+		<div class="min-height-200px">
+			<div class="pd-20 card-box mb-30">
+				<div class="clearfix mb-20">
+					<div class="pull-left">
+						<h4 class="text-blue h4">Các tour được đặt nhiều nhất</h4>
+					</div>
+				</div>
 
-				$result = mysqli_query($conn, $query);
+				<div class="row">
+					<?php
+					// Truy vấn các tour có ít nhất 2 lượt đặt
+					$query = "SELECT t.TOURID, t.TOURNAME, t.PRICE, t.TIMETOUR as TIMETOUR, t.IMAGE, COUNT(b.USERID) AS booking_count
+							FROM TOUR t
+							LEFT JOIN bookings b ON t.TOURID = b.TOURID
+							GROUP BY t.TOURID
+							HAVING booking_count >= 2
+							ORDER BY booking_count DESC"; // Sắp xếp theo số lượng đặt giảm dần
 
-				// Kiểm tra có bản ghi nào không
-				if (mysqli_num_rows($result) > 0) {
-					// Lặp qua các bản ghi và hiển thị
-					while ($row = mysqli_fetch_assoc($result)) {
-						echo "<tr>";
-						echo "<th>" . htmlspecialchars($row['ADNAME']) .  "</th>";
-						echo "<td>" . htmlspecialchars($row['TOURNAME']) .  "</td>";
-						echo "<td>" . htmlspecialchars($row['TOURTYPENAME']) . "</td>";
-						echo "<td>" . htmlspecialchars($row['PRICE']) . "</td>";
-						echo "<td>" . htmlspecialchars($row['TIMETOUR']) . " " . "Ngày" . "</td>";
+					$result = mysqli_query($conn, $query);
 
-						// Hiển thị ảnh tour
-						echo "<td><img src='data:image/jpeg;base64," . base64_encode($row['IMAGE']) . "' alt='Ảnh' style='width: 100px;'></td>";
-
-						echo "<td>
-                                        <a href='editTour.php?id=" . $row['TOURID'] . "' class='btn btn-info btn-sm'><i class='fa fa-edit'></i> Sửa</a>
-                                        <a href='deleteTour.php?id=" . $row['TOURID'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"Bạn có chắc chắn muốn xóa không?\");'><i class='fa fa-trash'></i> Xóa</a>
-                                      </td>";
-						echo "</tr>";
+					// Hiển thị giao diện HTML
+					// Kiểm tra có bản ghi nào không
+					if (mysqli_num_rows($result) > 0) {
+						// Lặp qua các bản ghi và hiển thị
+						while ($row = mysqli_fetch_assoc($result)) {
+							echo "<div class='col-md-4 mb-4'>";
+							echo "<div class='card'>";
+							// Hiển thị ảnh tour
+							echo "<img class='card-img-top' src='data:image/jpeg;base64," . base64_encode($row['IMAGE']) . "' alt='Ảnh tour'>";
+							echo "<div class='card-body'>";
+							echo "<h5 class='card-title'>" . htmlspecialchars($row['TOURNAME']) . "</h5>";
+							echo "<p class='card-text'>Giá: " . htmlspecialchars($row['PRICE']) . " VND</p>";
+							echo "<p class='card-text'>Thời gian: " . htmlspecialchars($row['TIMETOUR']) . " ngày</p>";
+							echo "<p class='card-text'>Số lượt đặt: " . htmlspecialchars($row['booking_count']) . " lượt</p>";
+							echo "</div>"; // Đóng card-body
+							echo "<div class='card-footer text-center'>";
+							echo "<a href='tourDetail.php?id=" . $row['TOURID'] . "' class='btn btn-primary'>Xem chi tiết</a>";
+							echo "</div>"; // Đóng card-footer
+							echo "</div>"; // Đóng card
+							echo "</div>"; // Đóng col-md-4
+						}
+					} else {
+						// Nếu không có tour bán chạy
+						echo "<p class='text-center'>Không có tour nào bán chạy.</p>";
 					}
-				} else {
-					echo "<tr><td colspan='7' class='text-center'>Không có tour nào để hiển thị.</td></tr>";
-				}
-				?>
-			</tbody>
-		</table>
+					?>
+				</div>
+			</div>
+		</div>
 	</div>
-</div>
 
-<!-- js -->
-<script src="vendors/scripts/core.js"></script>
-<script src="vendors/scripts/script.min.js"></script>
-<script src="vendors/scripts/process.js"></script>
-<script src="vendors/scripts/layout-settings.js"></script>
-<script src="src/plugins/apexcharts/apexcharts.min.js"></script>
-<script src="src/plugins/datatables/js/jquery.dataTables.min.js"></script>
-<script src="src/plugins/datatables/js/dataTables.bootstrap4.min.js"></script>
-<script src="src/plugins/datatables/js/dataTables.responsive.min.js"></script>
-<script src="src/plugins/datatables/js/responsive.bootstrap4.min.js"></script>
-<script src="vendors/scripts/dashboard.js"></script>
-</body>
 
-</html>
+	<!-- js -->
+	<script src="vendors/scripts/core.js"></script>
+	<script src="vendors/scripts/script.min.js"></script>
+	<script src="vendors/scripts/process.js"></script>
+	<script src="vendors/scripts/layout-settings.js"></script>
+	<script src="src/plugins/apexcharts/apexcharts.min.js"></script>
+	<script src="src/plugins/datatables/js/jquery.dataTables.min.js"></script>
+	<script src="src/plugins/datatables/js/dataTables.bootstrap4.min.js"></script>
+	<script src="src/plugins/datatables/js/dataTables.responsive.min.js"></script>
+	<script src="src/plugins/datatables/js/responsive.bootstrap4.min.js"></script>
+	<script src="vendors/scripts/dashboard.js"></script>
+	</body>
+
+	</html>

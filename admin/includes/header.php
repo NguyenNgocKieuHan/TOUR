@@ -20,11 +20,11 @@
         <!-- Basic Page Info -->
         <meta charset="utf-8">
         <title>TravelTour</title>
+        <link rel="shortcut icon" href="vendors/images/dolphin.png">
 
         <!-- Site favicon -->
-        <link rel="apple-touch-icon" sizes="180x180" href="vendors/images/apple-touch-icon.png">
-        <link rel="icon" type="image/png" sizes="32x32" href="vendors/images/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="vendors/images/favicon-16x16.png">
+        <!-- <link rel="apple-touch-icon" sizes="180x180" href="vendors/images/apple-touch-icon.png"> -->
+        <!-- <link rel="icon" type="image/png" sizes="16x16" href="vendors/images/favicon-16x16.png"> -->
 
         <!-- Mobile Specific Metas -->
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -96,7 +96,7 @@
                     <div class="dropdown">
                         <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
                             <span class="user-icon">
-                                <img src="vendors/images/photo1.jpg" alt="">
+                                <img src="vendors/images/dolphin.png" alt="">
                             </span>
                             <?php if (($_SESSION['ADID'])): ?>
                                 <span class="user-name"><?php echo htmlspecialchars($fullName); ?></span>
@@ -197,8 +197,9 @@
         <div class="left-side-bar">
             <div class="brand-logo">
                 <a href="index.php">
-                    <!-- <img src="vendors/images/deskapp-logo.svg" alt="" class="dark-logo"> -->
-                    <!-- <img src="vendors/images/deskapp-logo-white.svg" alt="" class="light-logo"> -->
+                    <img src="vendors/images/tenlogo.png" alt="Logo" style="width: 150px; height: auto;" class="light-logo">
+                    <img src=" vendors/images/tenlogo.png" alt="" class="dark-logo">
+                    <!-- <img src="vendors/images/logo.png" alt="" class="light-logo"> -->
                 </a>
                 <div class="close-sidebar" data-toggle="left-sidebar-close">
                     <i class="ion-close-round"></i>
@@ -239,7 +240,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="doanhthu.php" class="dropdown-toggle no-arrow">
+                                <a href="revenue.php" class="dropdown-toggle no-arrow">
                                     <span class="micon fa fa-file-o"></span><span class="mtext"> Quản lý Doanh thu</span>
                                 </a>
                             </li>

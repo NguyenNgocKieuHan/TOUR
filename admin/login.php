@@ -55,6 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
 	<meta charset="utf-8">
 	<title>TravelTour</title>
+	<link rel="shortcut icon" href="vendors/images/dolphin.png">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="vendors/styles/core.css">
@@ -67,7 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		<div class="container-fluid d-flex justify-content-between align-items-center">
 			<div class="brand-logo">
 				<a href="login.php">
-					<img src="vendors/images/deskapp-logo.svg" alt="">
+					<img src="vendors/images/tenlogo.png" alt="">
 				</a>
 			</div>
 			<div class="login-menu">

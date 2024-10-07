@@ -1002,21 +1002,7 @@ $result = $conn->query($query);
 <!-- Gallery End -->
 
 <!-- Tour Booking Start -->
-<?php
 
-// Lấy danh sách các tour từ cơ sở dữ liệu
-$sql = "SELECT TOURID, TOURNAME, PRICE FROM tour";
-$result = $conn->query($sql);
-
-$tours = [];
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $tours[] = $row;
-    }
-}
-
-$conn->close();
-?>
 <!-- Header Start -->
 <div class="container-fluid bg-breadcrumb">
     <div class="container text-center py-5" style="max-width: 900px;">
@@ -1047,13 +1033,13 @@ $conn->close();
                     <div class="row g-3">
                         <div class="col-md-6">
                             <div class="form-floating">
-                                <input type="text" class="form-control bg-white border-0" id="name" name="name" placeholder="Họ và tên" required>
+                                <input type="text" class="form-control bg-white border-0" id="name" name="name" placeholder="Họ và tên">
                                 <label for="name">Họ và tên</label>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-floating">
-                                <input type="email" class="form-control bg-white border-0" id="email" name="email" placeholder="Email" required>
+                                <input type="email" class="form-control bg-white border-0" id="email" name="email" placeholder="Email">
                                 <label for="email">Email</label>
                             </div>
                         </div>
@@ -1065,20 +1051,13 @@ $conn->close();
                         </div>
                         <div class="col-md-6">
                             <div class="form-floating">
-                                <select id="tourDropdown" class="form-select bg-white border-0" name="tourid">
-                                    <option value="">Chọn tour</option>
-                                    <?php foreach ($tours as $tour) { ?>
-                                        <option value="<?php echo $tour['TOURID']; ?>" data-price="<?php echo number_format($tour['PRICE'], 0, ',', '.') . " " . "VNĐ"; ?>">
-                                            <?php echo htmlspecialchars($tour['TOURNAME']); ?>
-                                        </option>
-                                    <?php } ?>
-                                </select>
+                                <input type="text" class="form-control bg-white border-0" id="tourDropdown" name="tourid" placeholder="Chọn tour">
                                 <label for="tourDropdown">Tên Tour</label>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-floating">
-                                <input type="number" class="form-control bg-white border-0" id="people_count" name="people_count" min="1" placeholder="Số lượng người" required>
+                                <input type="number" class="form-control bg-white border-0" id="people_count" name="people_count" min="1" placeholder="Số lượng người">
                                 <label for="people_count">Số người</label>
                             </div>
                         </div>
@@ -1089,7 +1068,7 @@ $conn->close();
                             </div>
                         </div>
                         <div class="col-12">
-                            <button class="btn btn-primary text-white w-100 py-3" type="submit">Đặt ngay</button>
+                            <button class="btn btn-primary text-white w-100 py-3" onclick="window.location.href='bookingg.php';">Đặt ngay</button>
                         </div>
                     </div>
                 </form>

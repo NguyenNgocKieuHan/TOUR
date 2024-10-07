@@ -3,7 +3,9 @@
 
 <head>
     <meta charset="utf-8">
-    <title>TravelTour</title>
+    <title>Traveltour</title>
+    <link rel="shortcut icon" href="../admin/vendors/images/dolphin.png">
+
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -71,8 +73,8 @@
                             <div class="dropdown-menu rounded">
                                 <a href="profile.php" class="dropdown-item"><i class="fas fa-user-alt me-2"></i> Hồ sơ của tôi</a>
                                 <a href="booking_history.php" class="dropdown-item"><i class="fas fa-shopping-cart me-2"></i> Lịch sử đặt tour</a>
-                                <a href="booking_status.php" class="dropdown-item"><i class="fas fa-bell me-2"></i> Thông báo</a>
-                                <a href="#" class="dropdown-item"><i class="fas fa-cog me-2"></i> Cài đặt tài khoản</a>
+                                <a href="notification.php" class="dropdown-item"><i class="fas fa-bell me-2"></i> Thông báo</a>
+                                <!-- <a href="#" class="dropdown-item"><i class="fas fa-cog me-2"></i> Cài đặt tài khoản</a> -->
                                 <a href="logout.php" class="dropdown-item"><i class="fas fa-sign-out-alt me-2"></i> Đăng xuất</a>
                             </div>
                         </div>
@@ -91,10 +93,10 @@
     <!-- Navbar & Hero Start -->
     <div class="container-fluid position-relative p-0">
         <nav class="navbar navbar-expand-lg navbar-light px-4 px-lg-5 py-3 py-lg-0">
-            <a href="" class="navbar-brand p-0">
-                <h1 class="m-0"><i class="fa fa-map-marker-alt me-3"></i>TravelTour</h1>
+            <a href="index.php">
+                <img src="../admin/vendors/images/tenlogo.png" alt="Logo" style=" width: 200px; height: 100px;">
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+            <button class=" navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
                 <span class="fa fa-bars"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
